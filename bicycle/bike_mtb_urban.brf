@@ -1,0 +1,609 @@
+# BRouter profile: MTB (urban)
+#
+# Short local rides: city hills, forests, after-work loops.
+#
+# Priorities:
+#   - mtb:scale S0-S2
+#   - forest (estimated_forest_class)
+#   - paths and tracks over roads
+#   - MTB route networks
+#   - limited climbing
+#
+# Avoids:
+#   - mtb:scale S3 (S4-S6 blocked)
+#   - sac_scale above mountain_hiking (blocked)
+#   - hike-a-bike (blocked by default)
+#   - mud and sand
+
+---context:global
+
+# User settings
+
+# Technical target: S0-S2. S3 is possible but intentionally expensive.
+assign cfg_allow_scale3 = true
+assign cfg_allow_scale4plus = false
+
+# Avoid hike-a-bike by default in local riding.
+assign cfg_allow_hike_a_bike = false
+
+# Prefer mapped MTB route networks.
+assign cfg_prefer_mtb_routes = true
+
+# Prefer ways through forest.
+assign cfg_prefer_forest = true
+
+# Extra penalty for wet ground, dirt, grass, rock, mud, clay and wood.
+assign cfg_wet_conditions = false
+
+# Use BRouter traffic estimates, speed limits and lane count.
+assign cfg_consider_traffic = true
+
+# Use BRouter unsafe-crossing estimates.
+assign cfg_consider_crossings = true
+
+# Account for hills.
+assign cfg_consider_elevation = true
+
+# Ferries remain available when they are useful.
+assign cfg_allow_ferries = true
+
+# Avoid riding through fords.
+assign cfg_block_fords = true
+
+# Local rides should be simple, but trail junctions are normal.
+assign cfg_turn_cost = 110
+
+
+# Bike and ETA model
+
+# Bike + rider in kg.
+assign cfg_mass = 90
+
+# Speed cap used by ETA calculation.
+assign cfg_max_speed = 50
+
+# Effective frontal drag area in m^2.
+assign cfg_drag_area = 0.38
+
+# Default rolling-resistance coefficient.
+assign cfg_rolling_resistance = 0.011
+
+# Sustainable rider power in watts.
+assign cfg_rider_power = 165
+
+
+# Elevation
+
+# Equivalent flat metres per vertical metre.
+assign cfg_uphill_cost = 18
+assign cfg_uphill_cutoff = 1
+
+# Unnecessary climbing matters more than in the alpine profile.
+assign cfg_uphill_max_slope = 12
+assign cfg_uphill_max_cost = 38
+
+# Descents are free; very steep descents get a safety penalty.
+assign cfg_downhill_cost = 0
+assign cfg_downhill_cutoff = 3
+assign cfg_downhill_max_slope = 18
+assign cfg_downhill_max_cost = 8
+
+assign cfg_elevation_penalty_buffer = 5
+assign cfg_elevation_max_buffer = 10
+assign cfg_elevation_buffer_reduce = 0.5
+
+
+# MTB routes
+
+# Added to ways outside MTB route networks when cfg_prefer_mtb_routes is true.
+assign cfg_non_mtb_route_penalty = 0.10
+
+
+# Road factors
+
+# 1.0 is ideal. Higher values are less attractive.
+assign cfg_factor_path = 1.00
+assign cfg_factor_track = 1.05
+assign cfg_factor_cycleway = 1.08
+assign cfg_factor_service = 1.12
+assign cfg_factor_residential = 1.16
+assign cfg_factor_unclassified = 1.25
+assign cfg_factor_tertiary = 1.50
+assign cfg_factor_secondary = 2.10
+assign cfg_factor_primary = 3.10
+assign cfg_factor_trunk = 8.00
+assign cfg_factor_other = 2.20
+
+
+# Surface penalties
+
+# Penalty by OSM surface.
+assign cfg_surface_asphalt = 0.08
+assign cfg_surface_compacted = 0.01
+assign cfg_surface_fine_gravel = 0.02
+assign cfg_surface_gravel = 0.06
+assign cfg_surface_ground = 0.03
+assign cfg_surface_dirt = 0.04
+assign cfg_surface_earth = 0.04
+assign cfg_surface_grass = 0.12
+assign cfg_surface_rock = 0.18
+assign cfg_surface_stone = 0.15
+assign cfg_surface_sand = 0.70
+assign cfg_surface_mud = 0.90
+assign cfg_surface_cobble = 0.14
+assign cfg_surface_other = 0.10
+
+# Smoothness complements surface; the worse signal dominates.
+# Local riding is less tolerant of rough surprise connectors.
+assign cfg_smooth_intermediate = 0.03
+assign cfg_smooth_medium = 0.08
+assign cfg_smooth_poor = 0.18
+assign cfg_smooth_bad = 0.30
+assign cfg_smooth_rough = 0.45
+assign cfg_smooth_robust = 0.15
+assign cfg_smooth_very_bad = 0.70
+assign cfg_smooth_high_clearance = 1.20
+assign cfg_smooth_horrible = 1.80
+assign cfg_smooth_offroad = 1.50
+assign cfg_smooth_very_horrible = 3.00
+
+# Added on tracks by tracktype.
+assign cfg_track_grade1 = 0.00
+assign cfg_track_grade2 = 0.02
+assign cfg_track_grade3 = 0.08
+assign cfg_track_grade4 = 0.22
+assign cfg_track_grade5 = 0.45
+
+
+# Technical-trail penalties
+
+# Downhill target S0-S2 by mtb:scale.
+assign cfg_down_mtb_0minus = 0.03
+assign cfg_down_mtb_0 = 0.01
+assign cfg_down_mtb_0plus = 0.00
+assign cfg_down_mtb_1minus = 0.00
+assign cfg_down_mtb_1 = 0.00
+assign cfg_down_mtb_1plus = 0.00
+assign cfg_down_mtb_2minus = 0.02
+assign cfg_down_mtb_2 = 0.06
+assign cfg_down_mtb_2plus = 0.18
+assign cfg_down_mtb_3 = 0.85
+assign cfg_down_mtb_4 = 4.00
+assign cfg_down_mtb_5 = 8.00
+assign cfg_down_mtb_6 = 9.00
+
+# Penalty by mtb:scale on flat sections.
+assign cfg_flat_mtb_0 = 0.00
+assign cfg_flat_mtb_1 = 0.02
+assign cfg_flat_mtb_2 = 0.12
+assign cfg_flat_mtb_3 = 0.90
+assign cfg_flat_mtb_4 = 5.00
+assign cfg_flat_mtb_5 = 8.00
+assign cfg_flat_mtb_6 = 9.00
+
+# Uphill rideability by mtb:scale:uphill.
+assign cfg_uphill_mtb_0 = 0.00
+assign cfg_uphill_mtb_1 = 0.25
+assign cfg_uphill_mtb_2 = 0.90
+assign cfg_uphill_mtb_3 = 2.50
+assign cfg_uphill_mtb_4 = 6.00
+assign cfg_uphill_mtb_5 = 9.00
+
+# Penalty by trail_visibility.
+assign cfg_visibility_intermediate = 0.08
+assign cfg_visibility_bad = 0.45
+assign cfg_visibility_horrible = 1.20
+assign cfg_visibility_no = 2.50
+
+# Penalty by sac_scale. Higher grades are blocked.
+assign cfg_sac_hiking = 1.20
+assign cfg_sac_mountain = 4.00
+
+
+# Forest preference
+
+# Penalty by BRouter forest class, 0 = no forest, 6 = dense forest.
+# Kept small: useful for reaching local woods, not a huge detour magnet.
+assign cfg_no_forest_0 = 0.12
+assign cfg_no_forest_1 = 0.08
+assign cfg_no_forest_2 = 0.05
+assign cfg_no_forest_3 = 0.03
+assign cfg_no_forest_4 = 0.01
+assign cfg_no_forest_5 = 0.00
+assign cfg_no_forest_6 = 0.00
+
+
+# Wet-surface penalties
+
+# Only used when cfg_wet_conditions is true.
+assign cfg_wet_ground = 0.25
+assign cfg_wet_dirt = 0.35
+assign cfg_wet_grass = 0.35
+assign cfg_wet_rock = 0.30
+assign cfg_wet_mud = 1.20
+assign cfg_wet_clay = 0.80
+assign cfg_wet_wood = 0.55
+
+
+# Traffic stress
+
+# Penalty by BRouter traffic class, speed limit and lane count. The highest one is used.
+assign cfg_traffic_3 = 0.15
+assign cfg_traffic_4 = 0.40
+assign cfg_traffic_5 = 0.80
+assign cfg_traffic_6 = 1.30
+assign cfg_traffic_7 = 2.00
+assign cfg_speed_60 = 0.30
+assign cfg_speed_80 = 0.70
+assign cfg_speed_100 = 1.10
+assign cfg_lanes_3 = 0.20
+assign cfg_lanes_4 = 0.45
+assign cfg_lanes_5plus = 0.80
+
+
+# Crossings and barriers
+
+# Cost by BRouter crossing-risk class when entering a major road from a minor one.
+assign cfg_crossing_1 = 35
+assign cfg_crossing_2 = 70
+assign cfg_crossing_3 = 120
+assign cfg_crossing_4 = 190
+assign cfg_crossing_5 = 280
+assign cfg_crossing_6 = 420
+
+# Barriers that force slowing down or lifting the bike.
+assign cfg_gate_cost = 60
+assign cfg_cycle_barrier_cost = 150
+assign cfg_stile_cost = 260
+assign cfg_turnstile_cost = 300
+assign cfg_bollard_cost = 5
+
+
+# Hike-a-bike and ferries
+
+# Only used when hike-a-bike or ferries are allowed above.
+assign cfg_hike_factor = 6.0
+assign cfg_hike_entry_cost = 260
+assign cfg_ferry_factor = 5.5
+assign cfg_ferry_entry_cost = 800
+
+
+# Hard limits
+
+# Values >= 10000 block a way.
+assign cfg_block_cost = 10000
+assign cfg_node_block_cost = 1000000
+assign cfg_max_factor = 10000
+
+
+# BRouter globals
+
+assign validForBikes = true
+assign totalMass = cfg_mass
+assign maxSpeed = cfg_max_speed
+assign S_C_x = cfg_drag_area
+assign C_r = cfg_rolling_resistance
+assign bikerPower = cfg_rider_power
+
+assign uphillcost = if cfg_consider_elevation then cfg_uphill_cost else 0
+assign uphillcutoff = cfg_uphill_cutoff
+assign uphillmaxslope = cfg_uphill_max_slope
+assign uphillmaxslopecost = if cfg_consider_elevation then cfg_uphill_max_cost else 0
+
+assign downhillcost = if cfg_consider_elevation then cfg_downhill_cost else 0
+assign downhillcutoff = cfg_downhill_cutoff
+assign downhillmaxslope = cfg_downhill_max_slope
+assign downhillmaxslopecost = if cfg_consider_elevation then cfg_downhill_max_cost else 0
+
+assign elevationpenaltybuffer = cfg_elevation_penalty_buffer
+assign elevationmaxbuffer = cfg_elevation_max_buffer
+assign elevationbufferreduce = cfg_elevation_buffer_reduce
+
+assign turnInstructionMode = 1
+assign turnInstructionCatchingRange = 25
+assign turnInstructionRoundabouts = true
+assign considerTurnRestrictions = true
+assign processUnusedTags = false
+assign consider_crossing = cfg_consider_crossings
+
+
+---context:way
+
+# MTB routes
+
+assign mtb_route =
+  if route=mtb then true
+  else if route_mtb_=yes then true
+  else if route_mtb_lcn=yes then true
+  else if route_mtb_ncn=yes then true
+  else if route_mtb_rcn=yes then true
+  else if route_mtb_mtb=yes then true
+  else route_bicycle_mtb=yes
+
+assign route_penalty =
+  if not cfg_prefer_mtb_routes then 0
+  else if mtb_route then 0
+  else cfg_non_mtb_route_penalty
+
+
+# Access
+
+assign defaultaccess =
+  if access= then not motorroad=yes
+  else if access=private|no then false
+  else true
+
+assign bikeaccess =
+  if bicycle= then defaultaccess
+  else not bicycle=private|no|dismount|use_sidepath
+
+assign footaccess =
+  if foot= then defaultaccess
+  else not foot=private|no|use_sidepath
+
+assign hike_only = ( and not bikeaccess footaccess )
+assign nodeaccessgranted = false
+assign access_penalty = if bikeaccess then 0 else if and cfg_allow_hike_a_bike footaccess then cfg_hike_factor else cfg_block_cost
+
+
+# One-way handling
+
+# Respect one-way tags on trails and roads, except with oneway:bicycle=no.
+assign badoneway =
+  if reversedirection=yes then
+    if oneway= then junction=roundabout|circular
+    else oneway=yes|true|1
+  else oneway=-1
+
+assign oneway_penalty =
+  if not badoneway then 0
+  else if oneway:bicycle=no then 0
+  else cfg_block_cost
+
+assign access_and_oneway = ( max access_penalty oneway_penalty )
+
+
+# Traffic stress
+
+assign trafficrisk =
+  if not cfg_consider_traffic then 0
+  else if estimated_traffic_class=7 then cfg_traffic_7
+  else if estimated_traffic_class=6 then cfg_traffic_6
+  else if estimated_traffic_class=5 then cfg_traffic_5
+  else if estimated_traffic_class=4 then cfg_traffic_4
+  else if estimated_traffic_class=3 then cfg_traffic_3
+  else 0
+
+assign speedrisk =
+  if not cfg_consider_traffic then 0
+  else if maxspeed=100|110|120|130 then cfg_speed_100
+  else if maxspeed=80|90 then cfg_speed_80
+  else if maxspeed=60|70 then cfg_speed_60
+  else 0
+
+assign lanerisk =
+  if not cfg_consider_traffic then 0
+  else if lanes=5|6|7|8 then cfg_lanes_5plus
+  else if lanes=4 then cfg_lanes_4
+  else if lanes=3 then cfg_lanes_3
+  else 0
+
+assign traffic_penalty = ( max trafficrisk ( max speedrisk lanerisk ) )
+
+
+# Forest preference
+
+assign forest_penalty =
+  if not cfg_prefer_forest then 0
+  else if estimated_forest_class=6|5 then cfg_no_forest_6
+  else if estimated_forest_class=4 then cfg_no_forest_4
+  else if estimated_forest_class=3 then cfg_no_forest_3
+  else if estimated_forest_class=2 then cfg_no_forest_2
+  else if estimated_forest_class=1 then cfg_no_forest_1
+  else cfg_no_forest_0
+
+
+# Surface
+
+assign surface_penalty =
+  if surface=asphalt|paved|concrete then cfg_surface_asphalt
+  else if surface=compacted then cfg_surface_compacted
+  else if surface=fine_gravel then cfg_surface_fine_gravel
+  else if surface=gravel|pebblestone then cfg_surface_gravel
+  else if surface=ground then cfg_surface_ground
+  else if surface=dirt then cfg_surface_dirt
+  else if surface=earth|unpaved then cfg_surface_earth
+  else if surface=grass|grass_paver then cfg_surface_grass
+  else if surface=rock then cfg_surface_rock
+  else if surface=stone then cfg_surface_stone
+  else if surface=sand then cfg_surface_sand
+  else if surface=mud then cfg_surface_mud
+  else if surface=cobblestone|sett then cfg_surface_cobble
+  else cfg_surface_other
+
+assign smoothness_penalty =
+  if smoothness=excellent|very_good|good then 0
+  else if smoothness=intermediate then cfg_smooth_intermediate
+  else if smoothness=medium then cfg_smooth_medium
+  else if smoothness=poor then cfg_smooth_poor
+  else if smoothness=bad then cfg_smooth_bad
+  else if smoothness=rough then cfg_smooth_rough
+  else if smoothness=robust_wheels then cfg_smooth_robust
+  else if smoothness=very_bad then cfg_smooth_very_bad
+  else if smoothness=high_clearance then cfg_smooth_high_clearance
+  else if smoothness=horrible then cfg_smooth_horrible
+  else if smoothness=off_road_wheels then cfg_smooth_offroad
+  else if smoothness=very_horrible then cfg_smooth_very_horrible
+  else if smoothness=impassable then cfg_block_cost
+  else 0
+
+assign roughness_penalty = ( max surface_penalty smoothness_penalty )
+
+assign track_penalty =
+  if highway=track then
+    if tracktype=grade1 then cfg_track_grade1
+    else if tracktype=grade2 then cfg_track_grade2
+    else if tracktype=grade3 then cfg_track_grade3
+    else if tracktype=grade4 then cfg_track_grade4
+    else if tracktype=grade5 then cfg_track_grade5
+    else 0
+  else 0
+
+assign visibility_penalty =
+  if trail_visibility=excellent|good then 0
+  else if trail_visibility=intermediate then cfg_visibility_intermediate
+  else if trail_visibility=bad then cfg_visibility_bad
+  else if trail_visibility=horrible then cfg_visibility_horrible
+  else if trail_visibility=no then cfg_visibility_no
+  else 0
+
+assign wet_penalty =
+  if not cfg_wet_conditions then 0
+  else if surface=ground|unpaved then cfg_wet_ground
+  else if surface=dirt then cfg_wet_dirt
+  else if surface=grass|grass_paver then cfg_wet_grass
+  else if surface=rock|stone then cfg_wet_rock
+  else if surface=mud then cfg_wet_mud
+  else if surface=clay then cfg_wet_clay
+  else if surface=wood then cfg_wet_wood
+  else 0
+
+
+# Technical trails
+
+assign flat_tech =
+  if mtb:scale=0-|0 then cfg_flat_mtb_0
+  else if mtb:scale=0+|1-|1|1+ then cfg_flat_mtb_1
+  else if mtb:scale=2-|2|2+ then cfg_flat_mtb_2
+  else if mtb:scale=3 then
+    if cfg_allow_scale3 then cfg_flat_mtb_3 else cfg_block_cost
+  else if mtb:scale=4|5|6 then
+    if cfg_allow_scale4plus then cfg_flat_mtb_4 else cfg_block_cost
+  else 0
+
+assign down_tech =
+  if mtb:scale=0- then cfg_down_mtb_0minus
+  else if mtb:scale=0 then cfg_down_mtb_0
+  else if mtb:scale=0+ then cfg_down_mtb_0plus
+  else if mtb:scale=1- then cfg_down_mtb_1minus
+  else if mtb:scale=1 then cfg_down_mtb_1
+  else if mtb:scale=1+ then cfg_down_mtb_1plus
+  else if mtb:scale=2- then cfg_down_mtb_2minus
+  else if mtb:scale=2 then cfg_down_mtb_2
+  else if mtb:scale=2+ then cfg_down_mtb_2plus
+  else if mtb:scale=3 then
+    if cfg_allow_scale3 then cfg_down_mtb_3 else cfg_block_cost
+  else if mtb:scale=4 then
+    if cfg_allow_scale4plus then cfg_down_mtb_4 else cfg_block_cost
+  else if mtb:scale=5 then
+    if cfg_allow_scale4plus then cfg_down_mtb_5 else cfg_block_cost
+  else if mtb:scale=6 then
+    if cfg_allow_scale4plus then cfg_down_mtb_6 else cfg_block_cost
+  else 0
+
+assign uphill_tech =
+  if mtb:scale:uphill=5 then cfg_uphill_mtb_5
+  else if mtb:scale:uphill=4 then cfg_uphill_mtb_4
+  else if mtb:scale:uphill=3 then cfg_uphill_mtb_3
+  else if mtb:scale:uphill=2 then cfg_uphill_mtb_2
+  else if mtb:scale:uphill=1 then cfg_uphill_mtb_1
+  else 0
+
+assign sac_penalty =
+  if sac_scale= then 0
+  else if sac_scale=hiking then cfg_sac_hiking
+  else if sac_scale=mountain_hiking then cfg_sac_mountain
+  else cfg_block_cost
+
+
+# Road type
+
+assign basefactor =
+  if highway=path then cfg_factor_path
+  else if highway=track then cfg_factor_track
+  else if highway=cycleway then cfg_factor_cycleway
+  else if highway=service then cfg_factor_service
+  else if highway=residential|living_street then cfg_factor_residential
+  else if highway=unclassified|road then cfg_factor_unclassified
+  else if highway=tertiary|tertiary_link then cfg_factor_tertiary
+  else if highway=secondary|secondary_link then cfg_factor_secondary
+  else if highway=primary|primary_link then cfg_factor_primary
+  else if highway=trunk|trunk_link then cfg_factor_trunk
+  else cfg_factor_other
+
+
+# Final cost
+
+assign common_penalty = ( add route_penalty ( add traffic_penalty ( add forest_penalty ( add roughness_penalty ( add track_penalty ( add visibility_penalty ( add wet_penalty sac_penalty ) ) ) ) ) ) )
+assign costfactor = if route=ferry then if cfg_allow_ferries then cfg_ferry_factor else cfg_block_cost else if highway=motorway|motorway_link then cfg_block_cost else if highway=construction|proposed|abandoned then cfg_block_cost else if and cfg_block_fords ford=yes then cfg_block_cost else min cfg_max_factor ( add basefactor ( add common_penalty ( add flat_tech access_and_oneway ) ) )
+
+# Uphill prefers rideable climbs. mtb:scale:uphill has the strongest effect.
+assign uphillcostfactor = ( max 1 ( min cfg_max_factor ( add basefactor ( add common_penalty ( add uphill_tech access_and_oneway ) ) ) ) )
+
+# Downhill prefers S0-S2; the downhill scale replaces the flat technical term.
+assign downhillcostfactor = ( max 1 ( min cfg_max_factor ( add basefactor ( add common_penalty ( add down_tech access_and_oneway ) ) ) ) )
+
+
+# Turns and transitions
+
+assign turncost = if junction=roundabout|circular then 0 else cfg_turn_cost
+assign initialclassifier = if route=ferry then 2 else if hike_only then 3 else 1
+assign initialcost = if route=ferry then cfg_ferry_entry_cost else if hike_only then cfg_hike_entry_cost else 0
+
+assign coming_from_lowprio = highway=path|track|cycleway|service|residential|living_street|unclassified|road
+
+
+# Navigation priority
+
+assign priorityclassifier =
+  if highway=trunk then 28
+  else if highway=primary then 26
+  else if highway=secondary then 24
+  else if highway=tertiary then 22
+  else if highway=unclassified then 20
+  else if highway=path|track|cycleway then 6
+  else 4
+
+
+---context:node
+
+# Access
+
+assign defaultaccess = if access=private|no then false else true
+assign bikeaccess = if bicycle=private|no then false else defaultaccess
+assign footaccess = if foot=private|no then false else defaultaccess
+
+
+# Crossing risk
+
+assign crossingcost =
+  if not cfg_consider_crossings then 0
+  else if not way:coming_from_lowprio then 0
+  else if estimated_crossing_class=6 then cfg_crossing_6
+  else if estimated_crossing_class=5 then cfg_crossing_5
+  else if estimated_crossing_class=4 then cfg_crossing_4
+  else if estimated_crossing_class=3 then cfg_crossing_3
+  else if estimated_crossing_class=2 then cfg_crossing_2
+  else if estimated_crossing_class=1 then cfg_crossing_1
+  else 0
+
+
+# Barriers
+
+assign barriercost =
+  if barrier=stile then cfg_stile_cost
+  else if barrier=turnstile then cfg_turnstile_cost
+  else if barrier=cycle_barrier then cfg_cycle_barrier_cost
+  else if barrier=gate|lift_gate then cfg_gate_cost
+  else if barrier=bollard then cfg_bollard_cost
+  else 0
+
+
+# Final cost
+
+assign accesscost =
+  if bikeaccess then 0
+  else if and cfg_allow_hike_a_bike footaccess then cfg_hike_entry_cost
+  else cfg_node_block_cost
+
+assign initialcost = ( add accesscost ( add crossingcost barriercost ) )

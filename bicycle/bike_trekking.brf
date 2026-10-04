@@ -1,0 +1,989 @@
+# BRouter profile: trekking bike
+#
+# Touring with luggage.
+#
+# Priorities:
+#   - low traffic stress
+#   - paved or compacted surfaces
+#   - signed cycle routes, without overriding road quality
+#   - moderate climbing
+#   - few turns
+#
+# Avoids:
+#   - grades above cfg_uphill_max_slope
+#   - rough unpaved surfaces
+#
+# Optional: cfg_prefer_quiet, cfg_prefer_forest, cfg_prefer_water,
+# cfg_avoid_towns.
+
+---context:global
+
+# User settings
+
+# Allow carrying or pushing the bike over steps.
+assign cfg_allow_steps = true
+
+# Allow ferries.
+assign cfg_allow_ferries = true
+
+# Allow short walking sections when cycling is not permitted.
+assign cfg_allow_dismount = true
+
+# Allow pushing against a one-way when foot access exists.
+assign cfg_allow_wrong_oneway_push = true
+
+# Allow riding or pushing through fords.
+assign cfg_allow_fords = false
+
+# Prefer signed bicycle routes, but do not let them override road quality.
+assign cfg_use_cycle_routes = true
+
+# Treat proposed bicycle routes like active routes.
+assign cfg_use_proposed_cycle_routes = false
+
+# Strongly prefer staying on signed bicycle routes.
+assign cfg_stick_to_cycle_routes = false
+
+# Use BRouter traffic estimates, speed limits and lane count.
+assign cfg_consider_traffic = true
+
+# Use BRouter's estimated unsafe-crossing classes.
+assign cfg_consider_crossings = true
+
+# Prefer routes with less climbing and avoid very steep grades.
+assign cfg_consider_elevation = true
+
+# Extra cost of a 90-degree turn in equivalent metres.
+assign cfg_turn_cost = 110
+
+# Multiplier for unpaved and rough-surface penalties.
+# 0 = ignore surface quality, 1 = normal trekking, 2 = strong avoidance.
+assign cfg_surface_weight = 1.0
+
+# Optional scenic preferences.
+assign cfg_prefer_quiet = false
+assign cfg_prefer_forest = false
+assign cfg_prefer_water = false
+assign cfg_avoid_towns = false
+
+
+# Bike and ETA model
+
+# Bike + rider + luggage in kg.
+assign cfg_mass = 95
+
+# Speed cap used by ETA calculation.
+assign cfg_max_speed = 45
+
+# Effective frontal drag area in m^2.
+assign cfg_drag_area = 0.45
+
+# Default rolling-resistance coefficient.
+assign cfg_rolling_resistance = 0.006
+
+# Sustainable rider power in watts.
+assign cfg_rider_power = 110
+
+
+# Elevation
+
+# Equivalent flat metres per vertical metre.
+assign cfg_uphill_cost = 45
+assign cfg_uphill_cutoff = 1.0
+
+# Steep climbs get a stronger penalty above this grade.
+assign cfg_uphill_max_slope = 8
+assign cfg_uphill_max_cost = 80
+
+# Mild descents are useful; steep descents get a safety penalty.
+assign cfg_downhill_cost = 3
+assign cfg_downhill_cutoff = 3
+assign cfg_downhill_max_slope = 12
+assign cfg_downhill_max_cost = 22
+
+assign cfg_elevation_penalty_buffer = 5
+assign cfg_elevation_max_buffer = 10
+assign cfg_elevation_buffer_reduce = 0.5
+
+
+# Cycle routes
+
+# Added to non-cycle-route ways when cycle-route preference is enabled.
+assign cfg_non_cycle_route_penalty = 0.08
+
+# Used instead when cfg_stick_to_cycle_routes=true.
+assign cfg_stick_cycle_route_penalty = 0.45
+
+# Turns on signed cycle routes still cost something to avoid zig-zagging.
+assign cfg_cycle_route_turn_cost = 70
+
+
+# Walking, steps and ferries
+
+# Factor added while walking the bike.
+assign cfg_dismount_penalty = 3.5
+
+# One-time cost when entering a walking section.
+assign cfg_dismount_entry_cost = 80
+
+# Factor added when pushing against a one-way.
+assign cfg_wrong_oneway_penalty = 4.0
+
+# Steps are short but disruptive, especially with luggage.
+assign cfg_steps_factor = 25
+assign cfg_steps_entry_cost = 160
+
+assign cfg_ferry_factor = 5.5
+assign cfg_ferry_entry_cost = 900
+
+
+# Hard limits
+
+assign cfg_block_cost = 10000
+assign cfg_node_block_cost = 1000000
+assign cfg_max_routable_factor = 9999
+
+
+# Road factors
+
+# 1.0 is ideal. Higher values are less attractive.
+assign cfg_factor_cycleway = 1.00
+assign cfg_factor_bicycle_road = 1.02
+assign cfg_factor_living = 1.05
+assign cfg_factor_residential = 1.08
+assign cfg_factor_service = 1.12
+assign cfg_factor_unclassified = 1.22
+assign cfg_factor_road = 1.50
+
+assign cfg_factor_tertiary_protected = 1.08
+assign cfg_factor_tertiary_painted = 1.20
+assign cfg_factor_tertiary_shared = 1.35
+assign cfg_factor_tertiary_shoulder = 1.45
+assign cfg_factor_tertiary_open = 1.65
+
+assign cfg_factor_secondary_protected = 1.15
+assign cfg_factor_secondary_painted = 1.35
+assign cfg_factor_secondary_shared = 1.55
+assign cfg_factor_secondary_shoulder = 1.70
+assign cfg_factor_secondary_open = 2.25
+
+assign cfg_factor_primary_protected = 1.25
+assign cfg_factor_primary_painted = 1.55
+assign cfg_factor_primary_shared = 1.80
+assign cfg_factor_primary_shoulder = 2.05
+assign cfg_factor_primary_open = 3.20
+
+assign cfg_factor_trunk_protected = 1.60
+assign cfg_factor_trunk_painted = 2.00
+assign cfg_factor_trunk_shared = 2.40
+assign cfg_factor_trunk_shoulder = 2.80
+assign cfg_factor_trunk_open = 8.00
+
+assign cfg_factor_track_grade1 = 1.05
+assign cfg_factor_track_grade2 = 1.18
+assign cfg_factor_track_grade3 = 1.45
+assign cfg_factor_track_grade4 = 2.20
+assign cfg_factor_track_grade5 = 3.50
+assign cfg_factor_track_unknown = 1.60
+
+assign cfg_factor_path_designated = 1.10
+assign cfg_factor_path_allowed = 1.25
+assign cfg_factor_path_other = 1.80
+
+assign cfg_factor_footway_designated = 1.15
+assign cfg_factor_footway_allowed = 1.35
+assign cfg_factor_pedestrian = 1.45
+assign cfg_factor_bridleway = 2.50
+assign cfg_factor_other = 2.00
+
+
+# Surface penalties
+
+assign cfg_surface_paving = 0.05
+assign cfg_surface_compacted = 0.10
+assign cfg_surface_fine_gravel = 0.12
+assign cfg_surface_sett = 0.25
+assign cfg_surface_cobblestone = 0.50
+assign cfg_surface_wood = 0.20
+assign cfg_surface_metal = 0.25
+assign cfg_surface_gravel = 0.35
+assign cfg_surface_pebblestone = 0.50
+assign cfg_surface_ground = 0.65
+assign cfg_surface_dirt = 0.80
+assign cfg_surface_grass = 1.10
+assign cfg_surface_sand_mud = 2.20
+assign cfg_surface_rock_stone = 2.50
+
+assign cfg_smooth_intermediate = 0.10
+assign cfg_smooth_medium = 0.25
+assign cfg_smooth_poor = 0.60
+assign cfg_smooth_bad = 1.00
+assign cfg_smooth_rough = 1.50
+assign cfg_smooth_very_bad = 2.50
+assign cfg_smooth_horrible = 5.00
+assign cfg_smooth_very_horrible = 9.00
+
+# Embedded rails are uncomfortable and can be hazardous.
+assign cfg_embedded_rails_penalty = 0.80
+
+# Technical trail difficulty.
+assign cfg_mtb_scale_0 = 0.15
+assign cfg_mtb_scale_1 = 1.50
+assign cfg_mtb_scale_2 = 4.00
+assign cfg_mtb_scale_3 = 7.00
+assign cfg_mtb_scale_4_plus = 12.00
+
+assign cfg_sac_hiking = 0.50
+assign cfg_sac_mountain = 3.00
+assign cfg_sac_demanding_mountain = 6.00
+assign cfg_sac_alpine = 10.00
+assign cfg_sac_demanding_alpine = 15.00
+assign cfg_sac_difficult_alpine = 20.00
+
+assign cfg_4wd_only_penalty = 4.00
+
+
+# Traffic stress
+
+assign cfg_traffic_1 = 0.05
+assign cfg_traffic_2 = 0.10
+assign cfg_traffic_3 = 0.20
+assign cfg_traffic_4 = 0.40
+assign cfg_traffic_5 = 0.75
+assign cfg_traffic_6 = 1.20
+assign cfg_traffic_7 = 1.80
+
+assign cfg_speed_40 = 0.10
+assign cfg_speed_50 = 0.20
+assign cfg_speed_60 = 0.35
+assign cfg_speed_70 = 0.55
+assign cfg_speed_80 = 0.75
+assign cfg_speed_90 = 1.00
+assign cfg_speed_100 = 1.30
+
+assign cfg_lanes_3 = 0.15
+assign cfg_lanes_4 = 0.30
+assign cfg_lanes_5 = 0.50
+assign cfg_lanes_6 = 0.70
+assign cfg_lanes_7 = 0.90
+assign cfg_lanes_8_plus = 1.10
+
+# Remaining motor-traffic stress with bicycle infrastructure.
+assign cfg_protected_stress_scale = 0.10
+assign cfg_painted_stress_scale = 0.45
+assign cfg_shared_stress_scale = 0.75
+assign cfg_shoulder_stress_scale = 0.60
+
+
+# Crossings, stops and barriers
+
+# Moderate values avoid pathological detours around single nodes.
+assign cfg_crossing_1 = 35
+assign cfg_crossing_2 = 70
+assign cfg_crossing_3 = 120
+assign cfg_crossing_4 = 190
+assign cfg_crossing_5 = 280
+assign cfg_crossing_6 = 400
+
+assign cfg_signal_cost = 12
+assign cfg_stop_cost = 10
+assign cfg_give_way_cost = 4
+
+assign cfg_rail_crossing_cost = 40
+assign cfg_rail_level_crossing_cost = 80
+
+assign cfg_cycle_barrier_cost = 70
+assign cfg_gate_cost = 25
+assign cfg_bollard_cost = 5
+assign cfg_stile_cost = 180
+assign cfg_kissing_gate_cost = 100
+assign cfg_turnstile_cost = 160
+
+# Used by BRouter's high-road crossing-turn logic.
+assign cfg_crossing_priority_high = 22
+assign cfg_crossing_priority_low = 21
+
+assign cfg_high_turn_1 = 25
+assign cfg_high_turn_2 = 50
+assign cfg_high_turn_3 = 85
+assign cfg_high_turn_4 = 130
+assign cfg_high_turn_5 = 190
+assign cfg_high_turn_6 = 280
+
+
+# Scenic preferences
+
+assign cfg_noise_1 = 0.00
+assign cfg_noise_2 = 0.05
+assign cfg_noise_3 = 0.10
+assign cfg_noise_4 = 0.20
+assign cfg_noise_5 = 0.35
+assign cfg_noise_6 = 0.50
+
+assign cfg_forest_1 = 0.30
+assign cfg_forest_2 = 0.20
+assign cfg_forest_3 = 0.10
+assign cfg_forest_4 = 0.05
+
+assign cfg_water_1 = 0.25
+assign cfg_water_2 = 0.15
+assign cfg_water_3 = 0.10
+assign cfg_water_4 = 0.05
+
+assign cfg_town_1 = 0.10
+assign cfg_town_2 = 0.20
+assign cfg_town_3 = 0.35
+assign cfg_town_4 = 0.50
+assign cfg_town_5 = 0.65
+assign cfg_town_6 = 0.80
+
+
+# Navigation
+
+assign cfg_turn_instruction_mode = 1
+assign cfg_turn_instruction_range = 40
+assign cfg_turn_instruction_roundabouts = true
+assign cfg_consider_turn_restrictions = true
+assign cfg_correct_misplaced_via_points = false
+assign cfg_correct_misplaced_via_distance = 400
+assign cfg_process_unused_tags = false
+assign cfg_add_beeline = false
+
+
+# Internal priority classes
+
+assign cfg_class_normal = 1
+assign cfg_class_ferry = 2
+assign cfg_class_dismount = 3
+assign cfg_class_steps = 4
+
+assign cfg_prio_motorway = 30
+assign cfg_prio_motorway_link = 29
+assign cfg_prio_trunk = 28
+assign cfg_prio_trunk_link = 27
+assign cfg_prio_primary = 26
+assign cfg_prio_primary_link = 25
+assign cfg_prio_secondary = 24
+assign cfg_prio_secondary_link = 23
+assign cfg_prio_tertiary = 22
+assign cfg_prio_tertiary_link = 21
+assign cfg_prio_unclassified = 20
+assign cfg_prio_local = 6
+assign cfg_prio_minor = 4
+assign cfg_prio_steps = 2
+assign cfg_prio_other = 0
+
+
+# BRouter globals
+
+assign validForBikes = true
+
+assign totalMass = cfg_mass
+assign maxSpeed = cfg_max_speed
+assign S_C_x = cfg_drag_area
+assign C_r = cfg_rolling_resistance
+assign bikerPower = cfg_rider_power
+
+assign uphillcost =
+  if cfg_consider_elevation then cfg_uphill_cost
+  else 0
+
+assign uphillcutoff = cfg_uphill_cutoff
+assign uphillmaxslope = cfg_uphill_max_slope
+assign uphillmaxslopecost =
+  if cfg_consider_elevation then cfg_uphill_max_cost
+  else 0
+
+assign downhillcost =
+  if cfg_consider_elevation then cfg_downhill_cost
+  else 0
+
+assign downhillcutoff = cfg_downhill_cutoff
+assign downhillmaxslope = cfg_downhill_max_slope
+assign downhillmaxslopecost =
+  if cfg_consider_elevation then cfg_downhill_max_cost
+  else 0
+
+assign elevationpenaltybuffer = cfg_elevation_penalty_buffer
+assign elevationmaxbuffer = cfg_elevation_max_buffer
+assign elevationbufferreduce = cfg_elevation_buffer_reduce
+
+assign turnInstructionMode = cfg_turn_instruction_mode
+assign turnInstructionCatchingRange = cfg_turn_instruction_range
+assign turnInstructionRoundabouts = cfg_turn_instruction_roundabouts
+assign considerTurnRestrictions = cfg_consider_turn_restrictions
+assign correctMisplacedViaPoints = cfg_correct_misplaced_via_points
+assign correctMisplacedViaPointsDistance = cfg_correct_misplaced_via_distance
+assign processUnusedTags = cfg_process_unused_tags
+assign add_beeline = cfg_add_beeline
+
+assign consider_crossing = cfg_consider_crossings
+assign crossing_Prio_H = cfg_crossing_priority_high
+assign crossing_Prio_L = cfg_crossing_priority_low
+
+assign cost_ToLeft_from_H_class1 = cfg_high_turn_1
+assign cost_ToLeft_from_H_class2 = cfg_high_turn_2
+assign cost_ToLeft_from_H_class3 = cfg_high_turn_3
+assign cost_ToLeft_from_H_class4 = cfg_high_turn_4
+assign cost_ToLeft_from_H_class5 = cfg_high_turn_5
+assign cost_ToLeft_from_H_class6 = cfg_high_turn_6
+
+assign cost_ToRight_from_H_class1 = cfg_high_turn_1
+assign cost_ToRight_from_H_class2 = cfg_high_turn_2
+assign cost_ToRight_from_H_class3 = cfg_high_turn_3
+assign cost_ToRight_from_H_class4 = cfg_high_turn_4
+assign cost_ToRight_from_H_class5 = cfg_high_turn_5
+assign cost_ToRight_from_H_class6 = cfg_high_turn_6
+
+
+---context:way
+
+# Cycle routes
+
+assign active_cycle_route =
+  if cfg_use_proposed_cycle_routes then
+    if route_bicycle_icn=yes|proposed then true
+    else if route_bicycle_ncn=yes|proposed then true
+    else if route_bicycle_rcn=yes|proposed then true
+    else route_bicycle_lcn=yes|proposed
+  else
+    if route_bicycle_icn=yes then true
+    else if route_bicycle_ncn=yes then true
+    else if route_bicycle_rcn=yes then true
+    else route_bicycle_lcn=yes
+
+assign is_cycle_route =
+  and cfg_use_cycle_routes active_cycle_route
+
+assign cycle_route_penalty =
+  if not cfg_use_cycle_routes then 0
+  else if is_cycle_route then 0
+  else if cfg_stick_to_cycle_routes then cfg_stick_cycle_route_penalty
+  else cfg_non_cycle_route_penalty
+
+
+# Access
+
+assign defaultaccess =
+  if access= then not motorroad=yes
+  else if access=private|no then false
+  else true
+
+assign bikeaccess =
+  if bicycle= then
+    if bicycle_road=yes then true
+    else if vehicle= then
+      if highway=footway then false
+      else defaultaccess
+    else not vehicle=private|no
+  else not bicycle=private|no|dismount|use_sidepath
+
+assign footaccess =
+  if bicycle=dismount then true
+  else if foot= then defaultaccess
+  else not foot=private|no|use_sidepath
+
+assign dismount =
+  and not bikeaccess footaccess
+
+assign nodeaccessgranted = false
+
+assign accesspenalty =
+  if bikeaccess then 0
+  else if and cfg_allow_dismount footaccess then cfg_dismount_penalty
+  else cfg_block_cost
+
+
+# Bicycle infrastructure
+
+assign bicycle_hint =
+  if bicycle=yes|permissive|designated then true
+  else if bicycle_road=yes then true
+  else if cyclestreet=yes then true
+  else lcn=yes
+
+assign protected_cycle =
+  if highway=cycleway then true
+  else if cycleway=track|opposite_track then true
+  else if cycleway:left=track|opposite_track then true
+  else if cycleway:right=track|opposite_track then true
+  else cycleway:both=track
+
+assign painted_cycle =
+  if cycleway=lane|opposite_lane then true
+  else if cycleway:left=lane|opposite_lane then true
+  else if cycleway:right=lane|opposite_lane then true
+  else cycleway:both=lane
+
+assign shared_cycle =
+  if cycleway=shared_lane|share_busway then true
+  else if cycleway:left=shared_lane|share_busway then true
+  else if cycleway:right=shared_lane|share_busway then true
+  else cycleway:both=shared_lane|share_busway
+
+assign shoulder_cycle =
+  if cycleway=shoulder then true
+  else cycleway:both=shoulder
+
+assign any_cycle_infra =
+  or protected_cycle
+    or painted_cycle
+      or shared_cycle shoulder_cycle
+
+assign motorfree =
+  or motor_vehicle=no vehicle=no
+
+
+# One-way handling
+
+assign badoneway =
+  if reversedirection=yes then
+    if oneway:bicycle=yes then true
+    else if oneway= then junction=roundabout
+    else oneway=yes|true|1
+  else oneway=-1
+
+assign legal_contraflow =
+  if not badoneway then true
+  else if oneway:bicycle=no then true
+  else if cycleway=opposite|opposite_lane|opposite_track then true
+  else if cycleway:left=opposite|opposite_lane|opposite_track then true
+  else if cycleway:right=opposite|opposite_lane|opposite_track then true
+  else if and cycleway:left=lane|track|shared_lane|share_busway cycleway:left:oneway=no|-1 then true
+  else if and cycleway:right=lane|track|shared_lane|share_busway cycleway:right:oneway=no|-1 then true
+  else false
+
+assign onewaypenalty =
+  if legal_contraflow then 0
+  else if and cfg_allow_wrong_oneway_push footaccess then cfg_wrong_oneway_penalty
+  else cfg_block_cost
+
+
+# Traffic stress
+
+assign trafficrisk =
+  if not cfg_consider_traffic then 0
+  else if estimated_traffic_class=7 then cfg_traffic_7
+  else if estimated_traffic_class=6 then cfg_traffic_6
+  else if estimated_traffic_class=5 then cfg_traffic_5
+  else if estimated_traffic_class=4 then cfg_traffic_4
+  else if estimated_traffic_class=3 then cfg_traffic_3
+  else if estimated_traffic_class=2 then cfg_traffic_2
+  else if estimated_traffic_class=1 then cfg_traffic_1
+  else 0
+
+assign speedrisk =
+  if not cfg_consider_traffic then 0
+  else if maxspeed=100|110|120|130 then cfg_speed_100
+  else if maxspeed=90 then cfg_speed_90
+  else if maxspeed=80 then cfg_speed_80
+  else if maxspeed=70 then cfg_speed_70
+  else if maxspeed=60 then cfg_speed_60
+  else if maxspeed=50 then cfg_speed_50
+  else if maxspeed=40 then cfg_speed_40
+  else 0
+
+assign lanerisk =
+  if not cfg_consider_traffic then 0
+  else if lanes=8 then cfg_lanes_8_plus
+  else if lanes=7 then cfg_lanes_7
+  else if lanes=6 then cfg_lanes_6
+  else if lanes=5 then cfg_lanes_5
+  else if lanes=4 then cfg_lanes_4
+  else if lanes=3 then cfg_lanes_3
+  else 0
+
+assign traffic_and_speed =
+  max trafficrisk speedrisk
+
+assign raw_motor_stress =
+  max traffic_and_speed lanerisk
+
+assign motor_stress =
+  if motorfree then 0
+  else if highway=cycleway then 0
+  else if protected_cycle then multiply raw_motor_stress cfg_protected_stress_scale
+  else if painted_cycle then multiply raw_motor_stress cfg_painted_stress_scale
+  else if shared_cycle then multiply raw_motor_stress cfg_shared_stress_scale
+  else if shoulder_cycle then multiply raw_motor_stress cfg_shoulder_stress_scale
+  else raw_motor_stress
+
+
+# Surface
+
+assign surfacepenalty =
+  if surface=asphalt|paved|concrete then 0
+  else if surface=paving_stones then cfg_surface_paving
+  else if surface=compacted then cfg_surface_compacted
+  else if surface=fine_gravel then cfg_surface_fine_gravel
+  else if surface=sett then cfg_surface_sett
+  else if surface=cobblestone then cfg_surface_cobblestone
+  else if surface=wood then cfg_surface_wood
+  else if surface=metal then cfg_surface_metal
+  else if surface=gravel then cfg_surface_gravel
+  else if surface=pebblestone then cfg_surface_pebblestone
+  else if surface=ground|earth then cfg_surface_ground
+  else if surface=dirt|unpaved then cfg_surface_dirt
+  else if surface=grass|grass_paver then cfg_surface_grass
+  else if surface=sand|mud|clay then cfg_surface_sand_mud
+  else if surface=rock|stone then cfg_surface_rock_stone
+  else 0
+
+assign cyclesurfacepenalty =
+  if cycleway:surface= then surfacepenalty
+  else if cycleway:surface=asphalt|paved|concrete then 0
+  else if cycleway:surface=paving_stones then cfg_surface_paving
+  else if cycleway:surface=compacted then cfg_surface_compacted
+  else if cycleway:surface=fine_gravel then cfg_surface_fine_gravel
+  else if cycleway:surface=sett then cfg_surface_sett
+  else if cycleway:surface=cobblestone then cfg_surface_cobblestone
+  else if cycleway:surface=gravel then cfg_surface_gravel
+  else if cycleway:surface=unpaved then cfg_surface_dirt
+  else surfacepenalty
+
+assign footsurfacepenalty =
+  if footway:surface= then surfacepenalty
+  else if footway:surface=asphalt|paved|concrete then 0
+  else if footway:surface=paving_stones then cfg_surface_paving
+  else if footway:surface=compacted then cfg_surface_compacted
+  else if footway:surface=fine_gravel then cfg_surface_fine_gravel
+  else if footway:surface=sett then cfg_surface_sett
+  else if footway:surface=cobblestone then cfg_surface_cobblestone
+  else if footway:surface=wood then cfg_surface_wood
+  else if footway:surface=gravel then cfg_surface_gravel
+  else if footway:surface=unpaved then cfg_surface_dirt
+  else surfacepenalty
+
+assign effective_surfacepenalty =
+  if any_cycle_infra then cyclesurfacepenalty
+  else if highway=footway then footsurfacepenalty
+  else surfacepenalty
+
+assign smoothnesspenalty =
+  if smoothness=excellent|very_good|good then 0
+  else if smoothness=intermediate then cfg_smooth_intermediate
+  else if smoothness=medium then cfg_smooth_medium
+  else if smoothness=poor then cfg_smooth_poor
+  else if smoothness=bad then cfg_smooth_bad
+  else if smoothness=rough then cfg_smooth_rough
+  else if smoothness=very_bad then cfg_smooth_very_bad
+  else if smoothness=horrible then cfg_smooth_horrible
+  else if smoothness=very_horrible then cfg_smooth_very_horrible
+  else if smoothness=impassable then cfg_block_cost
+  else 0
+
+assign mtbpenalty =
+  if mtb:scale=4|5|6 then cfg_mtb_scale_4_plus
+  else if mtb:scale=3 then cfg_mtb_scale_3
+  else if mtb:scale=2 then cfg_mtb_scale_2
+  else if mtb:scale=1|1+|1- then cfg_mtb_scale_1
+  else if mtb:scale=0|0+|0- then cfg_mtb_scale_0
+  else 0
+
+assign sacpenalty =
+  if sac_scale=difficult_alpine_hiking then cfg_sac_difficult_alpine
+  else if sac_scale=demanding_alpine_hiking then cfg_sac_demanding_alpine
+  else if sac_scale=alpine_hiking then cfg_sac_alpine
+  else if sac_scale=demanding_mountain_hiking then cfg_sac_demanding_mountain
+  else if sac_scale=mountain_hiking then cfg_sac_mountain
+  else if sac_scale=hiking then cfg_sac_hiking
+  else 0
+
+assign technicalpenalty =
+  max mtbpenalty sacpenalty
+
+assign surfacequalitypenalty =
+  multiply cfg_surface_weight
+    max effective_surfacepenalty smoothnesspenalty
+
+assign roughness =
+  add surfacequalitypenalty technicalpenalty
+
+assign fourwdpenalty =
+  if 4wd_only=yes then cfg_4wd_only_penalty
+  else 0
+
+assign railpenalty =
+  if embedded_rails=tram|yes|rail then cfg_embedded_rails_penalty
+  else 0
+
+
+# Scenic preferences
+
+assign noisepenalty =
+  if not cfg_prefer_quiet then 0
+  else if estimated_noise_class=6 then cfg_noise_6
+  else if estimated_noise_class=5 then cfg_noise_5
+  else if estimated_noise_class=4 then cfg_noise_4
+  else if estimated_noise_class=3 then cfg_noise_3
+  else if estimated_noise_class=2 then cfg_noise_2
+  else if estimated_noise_class=1 then cfg_noise_1
+  else 0
+
+assign forestpenalty =
+  if not cfg_prefer_forest then 0
+  else if estimated_forest_class=1 then cfg_forest_1
+  else if estimated_forest_class=2 then cfg_forest_2
+  else if estimated_forest_class=3 then cfg_forest_3
+  else if estimated_forest_class=4 then cfg_forest_4
+  else 0
+
+assign waterpenalty =
+  if not cfg_prefer_water then 0
+  else if estimated_river_class=1 then cfg_water_1
+  else if estimated_river_class=2 then cfg_water_2
+  else if estimated_river_class=3 then cfg_water_3
+  else if estimated_river_class=4 then cfg_water_4
+  else 0
+
+assign townpenalty =
+  if not cfg_avoid_towns then 0
+  else if estimated_town_class=6 then cfg_town_6
+  else if estimated_town_class=5 then cfg_town_5
+  else if estimated_town_class=4 then cfg_town_4
+  else if estimated_town_class=3 then cfg_town_3
+  else if estimated_town_class=2 then cfg_town_2
+  else if estimated_town_class=1 then cfg_town_1
+  else 0
+
+assign scenicpenalty =
+  add noisepenalty
+    add forestpenalty
+      add waterpenalty townpenalty
+
+
+# Road type
+
+assign basefactor =
+  if highway=cycleway then cfg_factor_cycleway
+  else if or bicycle_road=yes cyclestreet=yes then cfg_factor_bicycle_road
+  else if or highway=living_street living_street=yes then cfg_factor_living
+  else if highway=residential then cfg_factor_residential
+  else if highway=service then cfg_factor_service
+  else if highway=unclassified then cfg_factor_unclassified
+  else if highway=road then cfg_factor_road
+
+  else if highway=tertiary|tertiary_link then
+    if protected_cycle then cfg_factor_tertiary_protected
+    else if painted_cycle then cfg_factor_tertiary_painted
+    else if shared_cycle then cfg_factor_tertiary_shared
+    else if shoulder_cycle then cfg_factor_tertiary_shoulder
+    else cfg_factor_tertiary_open
+
+  else if highway=secondary|secondary_link then
+    if protected_cycle then cfg_factor_secondary_protected
+    else if painted_cycle then cfg_factor_secondary_painted
+    else if shared_cycle then cfg_factor_secondary_shared
+    else if shoulder_cycle then cfg_factor_secondary_shoulder
+    else cfg_factor_secondary_open
+
+  else if highway=primary|primary_link then
+    if protected_cycle then cfg_factor_primary_protected
+    else if painted_cycle then cfg_factor_primary_painted
+    else if shared_cycle then cfg_factor_primary_shared
+    else if shoulder_cycle then cfg_factor_primary_shoulder
+    else cfg_factor_primary_open
+
+  else if highway=trunk|trunk_link then
+    if protected_cycle then cfg_factor_trunk_protected
+    else if painted_cycle then cfg_factor_trunk_painted
+    else if shared_cycle then cfg_factor_trunk_shared
+    else if shoulder_cycle then cfg_factor_trunk_shoulder
+    else cfg_factor_trunk_open
+
+  else if highway=track then
+    if tracktype=grade1 then cfg_factor_track_grade1
+    else if tracktype=grade2 then cfg_factor_track_grade2
+    else if tracktype=grade3 then cfg_factor_track_grade3
+    else if tracktype=grade4 then cfg_factor_track_grade4
+    else if tracktype=grade5 then cfg_factor_track_grade5
+    else cfg_factor_track_unknown
+
+  else if highway=path then
+    if bicycle=designated then cfg_factor_path_designated
+    else if bicycle=yes|permissive then cfg_factor_path_allowed
+    else cfg_factor_path_other
+
+  else if highway=footway then
+    if bicycle=designated then cfg_factor_footway_designated
+    else if bicycle=yes|permissive then cfg_factor_footway_allowed
+    else cfg_factor_path_other
+
+  else if highway=pedestrian then cfg_factor_pedestrian
+  else if highway=bridleway then cfg_factor_bridleway
+  else cfg_factor_other
+
+
+# Turns and transitions
+
+assign turncost =
+  if junction=roundabout|circular then 0
+  else if is_cycle_route then cfg_cycle_route_turn_cost
+  else cfg_turn_cost
+
+assign initialclassifier =
+  if route=ferry then cfg_class_ferry
+  else if highway=steps then cfg_class_steps
+  else if dismount then cfg_class_dismount
+  else cfg_class_normal
+
+assign initialcost =
+  if route=ferry then cfg_ferry_entry_cost
+  else if highway=steps then cfg_steps_entry_cost
+  else if dismount then cfg_dismount_entry_cost
+  else 0
+
+assign coming_from_lowprio =
+  highway=track|cycleway|footway|path|residential|living_street|service|unclassified|road
+
+
+# Final cost
+
+assign access_and_oneway =
+  max accesspenalty onewaypenalty
+
+assign costfactor =
+  if and highway= not route=ferry then cfg_block_cost
+  else if highway=motorway|motorway_link then cfg_block_cost
+  else if highway=proposed|abandoned|construction then cfg_block_cost
+  else if smoothness=impassable then cfg_block_cost
+  else if route=ferry then
+    if cfg_allow_ferries then cfg_ferry_factor
+    else cfg_block_cost
+  else if highway=steps then
+    if and cfg_allow_steps footaccess then
+      min cfg_max_routable_factor
+        add cfg_steps_factor access_and_oneway
+    else cfg_block_cost
+  else min cfg_max_routable_factor
+    add basefactor
+      add cycle_route_penalty
+        add motor_stress
+          add roughness
+            add fourwdpenalty
+              add railpenalty
+                add scenicpenalty access_and_oneway
+
+
+# Navigation priority
+
+assign priorityclassifier =
+  if highway=motorway then cfg_prio_motorway
+  else if highway=motorway_link then cfg_prio_motorway_link
+  else if highway=trunk then cfg_prio_trunk
+  else if highway=trunk_link then cfg_prio_trunk_link
+  else if highway=primary then cfg_prio_primary
+  else if highway=primary_link then cfg_prio_primary_link
+  else if highway=secondary then cfg_prio_secondary
+  else if highway=secondary_link then cfg_prio_secondary_link
+  else if highway=tertiary then cfg_prio_tertiary
+  else if highway=tertiary_link then cfg_prio_tertiary_link
+  else if highway=unclassified then cfg_prio_unclassified
+  else if highway=residential|living_street|service|cycleway then cfg_prio_local
+  else if bicycle=designated then cfg_prio_local
+  else if highway=track|road|path|footway|bridleway then cfg_prio_minor
+  else if highway=steps|pedestrian then cfg_prio_steps
+  else cfg_prio_other
+
+assign isbadoneway =
+  not equal onewaypenalty 0
+
+assign isgoodoneway =
+  if reversedirection=yes then oneway=-1
+  else if oneway= then junction=roundabout
+  else oneway=yes|true|1
+
+assign isroundabout =
+  junction=roundabout
+
+assign islinktype =
+  highway=motorway_link|trunk_link|primary_link|secondary_link|tertiary_link
+
+assign isgoodforcars =
+  if greater priorityclassifier cfg_prio_local then true
+  else if highway=residential|living_street|service then true
+  else if and highway=track tracktype=grade1 then true
+  else false
+
+assign classifiermask =
+  add isbadoneway
+    add multiply isgoodoneway 2
+      add multiply isroundabout 4
+        add multiply islinktype 8
+          multiply isgoodforcars 16
+
+assign dummyUsage = smoothness=
+
+
+---context:node
+
+# Access
+
+assign defaultaccess =
+  if access= then true
+  else if access=private|no then false
+  else true
+
+assign bikeaccess =
+  if nodeaccessgranted=yes then true
+  else if bicycle= then
+    if vehicle= then defaultaccess
+    else not vehicle=private|no
+  else not bicycle=private|no|dismount
+
+assign footaccess =
+  if bicycle=dismount then true
+  else if foot= then defaultaccess
+  else not foot=private|no
+
+
+# Crossing risk
+
+assign crossingcost =
+  if not cfg_consider_crossings then 0
+  else if not way:coming_from_lowprio then 0
+  else if estimated_crossing_class=1 then cfg_crossing_1
+  else if estimated_crossing_class=2 then cfg_crossing_2
+  else if estimated_crossing_class=3 then cfg_crossing_3
+  else if estimated_crossing_class=4 then cfg_crossing_4
+  else if estimated_crossing_class=5 then cfg_crossing_5
+  else if estimated_crossing_class=6 then cfg_crossing_6
+  else 0
+
+
+# Stops, rail crossings and barriers
+
+assign controlcost =
+  if highway=traffic_signals then cfg_signal_cost
+  else if highway=stop then cfg_stop_cost
+  else if highway=give_way then cfg_give_way_cost
+  else 0
+
+assign railcrossingcost =
+  if railway=level_crossing then cfg_rail_level_crossing_cost
+  else if railway=crossing then cfg_rail_crossing_cost
+  else 0
+
+assign barriercost =
+  if barrier=stile then cfg_stile_cost
+  else if barrier=turnstile then cfg_turnstile_cost
+  else if barrier=kissing_gate then cfg_kissing_gate_cost
+  else if barrier=cycle_barrier then cfg_cycle_barrier_cost
+  else if barrier=gate|lift_gate then cfg_gate_cost
+  else if barrier=bollard then cfg_bollard_cost
+  else 0
+
+
+# Final cost
+
+assign accesscost =
+  if bikeaccess then 0
+  else if and cfg_allow_dismount footaccess then cfg_dismount_entry_cost
+  else cfg_node_block_cost
+
+assign initialcost =
+  if and not cfg_allow_fords highway=ford then cfg_node_block_cost
+  else add accesscost
+    add crossingcost
+      add controlcost
+        add railcrossingcost barriercost
