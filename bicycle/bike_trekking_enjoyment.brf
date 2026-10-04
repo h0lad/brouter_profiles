@@ -1,4 +1,4 @@
-# BRouter profile: trekking bike (enjoyment)
+# BRouter profile: trekking bike enjoyment
 #
 # Trekking variant weighted for scenery.
 #
@@ -70,10 +70,10 @@ assign cfg_block_fords = true
 assign cfg_turn_cost = 100
 
 # Turns on signed long-distance routes are easier to follow.
-assign cfg_cycle_route_turn_cost = 65
+assign cfg_cycle_route_turn_cost = 70
 
 # 0 ignores surface quality. 1 uses full configured penalties.
-assign cfg_surface_weight = 0.75
+assign cfg_surface_weight = 0.80
 
 
 # Bike and ETA model
@@ -96,8 +96,8 @@ assign cfg_rider_power = 105
 # Elevation
 
 # One vertical metre costs this many equivalent flat metres.
-# 500 extra climbing metres therefore cost about 7.5 km.
-assign cfg_uphill_cost = 15
+# 500 extra climbing metres therefore cost about 7.75 km.
+assign cfg_uphill_cost = 15.5
 
 # Ignore tiny elevation noise below this gradient.
 assign cfg_uphill_cutoff = 1.0
@@ -121,7 +121,7 @@ assign cfg_elevation_buffer_reduce = 0.5
 
 # Added to non-cycle-route ways.
 # Moderate by design: a bad signed route can still lose.
-assign cfg_non_cycle_route_penalty = 0.06
+assign cfg_non_cycle_route_penalty = 0.07
 
 
 # Scenic preferences
@@ -134,26 +134,26 @@ assign cfg_non_cycle_route_penalty = 0.06
 # Trekking profile because this profile also scores traffic and scenery.
 assign cfg_noise_1 = 0.02
 assign cfg_noise_2 = 0.07
-assign cfg_noise_3 = 0.18
-assign cfg_noise_4 = 0.38
-assign cfg_noise_5 = 0.58
-assign cfg_noise_6 = 0.82
+assign cfg_noise_3 = 0.17
+assign cfg_noise_4 = 0.30
+assign cfg_noise_5 = 0.48
+assign cfg_noise_6 = 0.76
 
 # Missing-green penalty.
-assign cfg_no_forest_0 = 0.10
-assign cfg_no_forest_1 = 0.08
-assign cfg_no_forest_2 = 0.06
-assign cfg_no_forest_3 = 0.04
-assign cfg_no_forest_4 = 0.02
+assign cfg_no_forest_0 = 0.11
+assign cfg_no_forest_1 = 0.085
+assign cfg_no_forest_2 = 0.065
+assign cfg_no_forest_3 = 0.045
+assign cfg_no_forest_4 = 0.022
 assign cfg_no_forest_5 = 0.01
 assign cfg_no_forest_6 = 0.00
 
 # Missing-water penalty.
-assign cfg_no_river_0 = 0.10
-assign cfg_no_river_1 = 0.08
-assign cfg_no_river_2 = 0.06
-assign cfg_no_river_3 = 0.04
-assign cfg_no_river_4 = 0.02
+assign cfg_no_river_0 = 0.11
+assign cfg_no_river_1 = 0.085
+assign cfg_no_river_2 = 0.065
+assign cfg_no_river_3 = 0.045
+assign cfg_no_river_4 = 0.022
 assign cfg_no_river_5 = 0.01
 assign cfg_no_river_6 = 0.00
 
@@ -339,7 +339,7 @@ assign cfg_crossing_4 = 160
 assign cfg_crossing_5 = 240
 assign cfg_crossing_6 = 340
 
-assign cfg_signal_cost = 30
+assign cfg_signal_cost = 85
 assign cfg_stop_cost = 12
 assign cfg_give_way_cost = 4
 
@@ -349,17 +349,17 @@ assign cfg_rail_level_crossing_cost = 75
 
 # Barriers and tunnels
 
-assign cfg_cycle_barrier_cost = 165
-assign cfg_gate_cost = 40
+assign cfg_cycle_barrier_cost = 180
+assign cfg_gate_cost = 45
 assign cfg_bollard_cost = 5
-assign cfg_stile_cost = 220
-assign cfg_kissing_gate_cost = 140
-assign cfg_turnstile_cost = 220
+assign cfg_stile_cost = 240
+assign cfg_kissing_gate_cost = 150
+assign cfg_turnstile_cost = 240
 
 assign cfg_embedded_rails_penalty = 0.55
 
 assign cfg_tunnel_lit_penalty = 0.05
-assign cfg_tunnel_unlit_penalty = 0.30
+assign cfg_tunnel_unlit_penalty = 0.33
 
 
 # Hard limits

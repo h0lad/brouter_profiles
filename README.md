@@ -2,8 +2,6 @@
 
 Routing profiles for [BRouter](https://github.com/abrensch/brouter) and BRouter-Web.
 
-The routing weights were fine tuned with Monte-Carlo-Simulations.
-
 ## Profiles
 
 Bicycle:
