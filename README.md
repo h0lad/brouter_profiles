@@ -12,11 +12,12 @@ Bicycle:
 - [Gravel bike](bicycle/bike_gravel.brf): paved and unpaved roads, no technical trails
 - [MTB (alpine)](bicycle/bike_mtb_alpine.brf): long climbs and technical descents in real mountains
 - [MTB (urban)](bicycle/bike_mtb_urban.brf): city hills, local forests and after-work loops
+- [Liegerad](bicycle/bike_liegerad.brf): fast two-wheel recumbent for road riding and touring
 - [Racing bike](bicycle/bike_race.brf): smooth pavement, few turns and stops
 - [Trekking bike](bicycle/bike_trekking.brf): trekking and touring, including luggage
 - [Trekking bike (enjoyment)](bicycle/bike_trekking_enjoyment.brf): pleasant long-distance touring on signed, scenic routes
 
-E-scooter:
+E-Scooter:
 
 - [E-Scooter](e-scooter/escooter.brf): powerful e-scooter that can handle steep climbs
 
