@@ -42,7 +42,7 @@ assign cfg_allow_dismount = false
 assign cfg_block_fords = true
 
 # High by design: racing routes should preserve momentum.
-assign cfg_turn_cost = 115
+assign cfg_turn_cost = 95
 
 # 0 ignores surface quality, 1 is the calibrated default.
 assign cfg_surface_weight = 1.10
