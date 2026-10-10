@@ -227,6 +227,13 @@ assign cfg_lanes_3 = 0.15
 assign cfg_lanes_4 = 0.30
 assign cfg_lanes_5plus = 0.55
 
+# Bicycle infrastructure along tertiary and larger roads. Relief removes that share
+# of the gap to cfg_factor_cycleway; stress scales reduce the traffic penalty.
+assign cfg_protected_road_relief = 0.60
+assign cfg_painted_road_relief = 0.25
+assign cfg_protected_stress_scale = 0.10
+assign cfg_painted_stress_scale = 0.45
+
 
 # Crossings and barriers
 
@@ -382,7 +389,29 @@ assign lanerisk =
   else if lanes=3 then cfg_lanes_3
   else 0
 
-assign traffic_penalty = ( max trafficrisk ( max speedrisk lanerisk ) )
+assign protected_cycle =
+  if cycleway=track|opposite_track then true
+  else if cycleway:left=track|opposite_track then true
+  else if cycleway:right=track|opposite_track then true
+  else cycleway:both=track
+
+assign painted_cycle =
+  if cycleway=lane|opposite_lane then true
+  else if cycleway:left=lane|opposite_lane then true
+  else if cycleway:right=lane|opposite_lane then true
+  else cycleway:both=lane
+
+assign raw_traffic_penalty = ( max trafficrisk ( max speedrisk lanerisk ) )
+
+assign traffic_penalty =
+  if protected_cycle then multiply raw_traffic_penalty cfg_protected_stress_scale
+  else if painted_cycle then multiply raw_traffic_penalty cfg_painted_stress_scale
+  else raw_traffic_penalty
+
+assign road_relief =
+  if protected_cycle then cfg_protected_road_relief
+  else if painted_cycle then cfg_painted_road_relief
+  else 0
 
 
 # Surface
@@ -511,10 +540,10 @@ assign basefactor =
   else if highway=service then cfg_factor_service
   else if highway=residential|living_street then cfg_factor_residential
   else if highway=unclassified|road then cfg_factor_unclassified
-  else if highway=tertiary|tertiary_link then cfg_factor_tertiary
-  else if highway=secondary|secondary_link then cfg_factor_secondary
-  else if highway=primary|primary_link then cfg_factor_primary
-  else if highway=trunk|trunk_link then cfg_factor_trunk
+  else if highway=tertiary|tertiary_link then add cfg_factor_tertiary ( multiply road_relief ( sub cfg_factor_cycleway cfg_factor_tertiary ) )
+  else if highway=secondary|secondary_link then add cfg_factor_secondary ( multiply road_relief ( sub cfg_factor_cycleway cfg_factor_secondary ) )
+  else if highway=primary|primary_link then add cfg_factor_primary ( multiply road_relief ( sub cfg_factor_cycleway cfg_factor_primary ) )
+  else if highway=trunk|trunk_link then add cfg_factor_trunk ( multiply road_relief ( sub cfg_factor_cycleway cfg_factor_trunk ) )
   else cfg_factor_other
 
 
