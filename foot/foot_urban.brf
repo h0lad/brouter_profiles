@@ -209,6 +209,10 @@ assign cfg_crossing_5 = 235
 assign cfg_crossing_6 = 330
 
 
+# Fords and stepping stones cost extra in dry weather and are blocked in rain.
+assign cfg_ford_cost = 80
+
+
 # Barriers
 
 assign cfg_gate_cost = 12
@@ -492,6 +496,7 @@ assign costfactor =
     else cfg_block_cost
   else if highway=motorway|motorway_link then cfg_block_cost
   else if highway=construction|proposed|abandoned then cfg_block_cost
+  else if and cfg_rainy ford=yes|stepping_stones then cfg_block_cost
   else if not footaccess then cfg_block_cost
   else min cfg_max_factor normal_cost
 
@@ -584,10 +589,10 @@ assign loaded_barrier_extra =
   else 0
 
 assign barriercost =
-  if barrier=stile then add cfg_stile_cost loaded_barrier_extra
-  else if barrier=turnstile then add cfg_turnstile_cost loaded_barrier_extra
+  if barrier=stile|horse_stile then add cfg_stile_cost loaded_barrier_extra
+  else if barrier=turnstile|full-height_turnstile then add cfg_turnstile_cost loaded_barrier_extra
   else if barrier=cycle_barrier then add cfg_cycle_barrier_cost loaded_barrier_extra
-  else if barrier=gate then add cfg_gate_cost loaded_barrier_extra
+  else if barrier=gate|swing_gate|sliding_gate|hampshire_gate|bump_gate then add cfg_gate_cost loaded_barrier_extra
   else if barrier=lift_gate then add cfg_lift_gate_cost loaded_barrier_extra
   else if barrier=bollard then cfg_bollard_cost
   else 0
@@ -599,4 +604,12 @@ assign accesscost =
   if footaccess then 0
   else cfg_node_block_cost
 
-assign initialcost = ( add accesscost ( add crossingcost ( add controlcost ( add railcrossingcost barriercost ) ) ) )
+# Ford nodes are mostly tagged ford=*; highway=ford is the older tagging.
+assign fordnode = ( or ford=yes|stepping_stones highway=ford )
+
+assign fordcost =
+  if not fordnode then 0
+  else if cfg_rainy then cfg_node_block_cost
+  else cfg_ford_cost
+
+assign initialcost = ( add fordcost ( add accesscost ( add crossingcost ( add controlcost ( add railcrossingcost barriercost ) ) ) ) )

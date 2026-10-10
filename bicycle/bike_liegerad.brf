@@ -411,7 +411,7 @@ assign access_and_oneway = ( max access_penalty oneway_penalty )
 assign normal_cost = ( add basefactor ( add cycle_route_penalty ( add motor_stress ( add noise_penalty ( add roughness_penalty ( add wet_penalty ( add rail_penalty ( add tunnel_penalty ( add calming_penalty access_and_oneway ) ) ) ) ) ) ) ) )
 assign costfactor =
   if and highway= not route=ferry then cfg_block_cost
-  else if route=ferry then if and cfg_allow_ferries lesser access_and_oneway 9999 then cfg_ferry_factor else cfg_block_cost else if highway=motorway|motorway_link then cfg_block_cost else if highway=proposed|abandoned|construction|via_ferrata then cfg_block_cost else if highway=steps then cfg_block_cost else if highway=bridleway then cfg_block_cost else if and cfg_block_fords ford=yes then cfg_block_cost else min cfg_max_factor normal_cost
+  else if route=ferry then if and cfg_allow_ferries lesser access_and_oneway 9999 then cfg_ferry_factor else cfg_block_cost else if highway=motorway|motorway_link then cfg_block_cost else if highway=proposed|abandoned|construction|via_ferrata then cfg_block_cost else if highway=steps then cfg_block_cost else if highway=bridleway then cfg_block_cost else if and cfg_block_fords ford=yes|stepping_stones then cfg_block_cost else min cfg_max_factor normal_cost
 
 assign turncost = if junction=roundabout|circular then 0 else if active_cycle_route then cfg_cycle_route_turn_cost else cfg_turn_cost
 assign initialclassifier = if route=ferry then 2 else if dismount then 3 else 1
@@ -440,10 +440,13 @@ assign railcrossingcost = if railway=level_crossing then cfg_rail_level_crossing
 # Barriers
 
 assign hard_barrier = barrier=stile|turnstile|full-height_turnstile|kissing_gate|horse_stile|motorcycle_barrier|chain|block|log|obstacle
-assign strict_barrier = barrier=cycle_barrier|chicane
-assign barriercost = if hard_barrier then cfg_node_block_cost else if and cfg_strict_barriers strict_barrier then cfg_node_block_cost else if barrier=cycle_barrier then cfg_cycle_barrier_cost else if barrier=chicane then cfg_chicane_cost else if barrier=gate then cfg_gate_cost else if barrier=lift_gate then cfg_lift_gate_cost else if barrier=bollard then cfg_bollard_cost else if barrier=door then cfg_door_cost else 0
+assign strict_barrier = barrier=cycle_barrier|chicane|motorcycle_barrier
+assign barriercost = if hard_barrier then cfg_node_block_cost else if and cfg_strict_barriers strict_barrier then cfg_node_block_cost else if barrier=cycle_barrier|motorcycle_barrier then cfg_cycle_barrier_cost else if barrier=chicane then cfg_chicane_cost else if barrier=gate|swing_gate|sliding_gate|hampshire_gate|bump_gate then cfg_gate_cost else if barrier=lift_gate then cfg_lift_gate_cost else if barrier=bollard then cfg_bollard_cost else if barrier=door then cfg_door_cost else 0
 
 assign accesscost = if bikeaccess then 0 else cfg_node_block_cost
 
 # Apply the calculated node access, crossing, stop and barrier costs.
-assign initialcost = if and cfg_block_fords highway=ford then cfg_node_block_cost else ( add accesscost ( add crossingcost ( add controlcost ( add railcrossingcost barriercost ) ) ) )
+# Ford nodes are mostly tagged ford=*; highway=ford is the older tagging.
+assign fordnode = ( or ford=yes|stepping_stones highway=ford )
+
+assign initialcost = if and cfg_block_fords fordnode then cfg_node_block_cost else ( add accesscost ( add crossingcost ( add controlcost ( add railcrossingcost barriercost ) ) ) )

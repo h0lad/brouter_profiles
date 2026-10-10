@@ -428,11 +428,12 @@ assign surfacepenalty =
   else if surface=fine_gravel then cfg_surface_fine_gravel
   else if surface=sett then cfg_surface_sett
   else if surface=cobblestone then cfg_surface_cobblestone
-  else if surface=wood then cfg_surface_wood
+  else if surface=wood|metal then cfg_surface_wood
   else if surface=gravel|pebblestone then cfg_surface_gravel
   else if surface=ground|earth|dirt|unpaved then cfg_surface_unpaved
-  else if surface=grass then cfg_surface_grass
-  else if surface=sand|mud then cfg_surface_sand_mud
+  else if surface=grass|grass_paver then cfg_surface_grass
+  else if surface=sand|mud|clay then cfg_surface_sand_mud
+  else if surface=rock|stone then cfg_surface_unpaved
   # Untagged tracks: infer the typical surface from tracktype, so missing data
   # is not cheaper than the same track with its surface mapped.
   else if not surface= then 0
@@ -449,9 +450,9 @@ assign smoothnesspenalty =
   else if smoothness=poor then cfg_smooth_poor
   else if smoothness=bad then cfg_smooth_bad
   else if smoothness=rough then cfg_smooth_rough
-  else if smoothness=very_bad then cfg_smooth_very_bad
-  else if smoothness=horrible then cfg_smooth_horrible
-  else if smoothness=very_horrible then cfg_smooth_very_horrible
+  else if smoothness=very_bad|robust_wheels then cfg_smooth_very_bad
+  else if smoothness=horrible|high_clearance then cfg_smooth_horrible
+  else if smoothness=very_horrible|off_road_wheels then cfg_smooth_very_horrible
   else if smoothness=impassable then cfg_block_cost
   else 0
 
@@ -531,7 +532,7 @@ assign costfactor =
   else if and cfg_block_pedestrian highway=pedestrian then cfg_block_cost
   else if and cfg_block_steps highway=steps then cfg_block_cost
   else if and cfg_block_bridleway highway=bridleway then cfg_block_cost
-  else if and cfg_block_fords ford=yes then cfg_block_cost
+  else if and cfg_block_fords ford=yes|stepping_stones then cfg_block_cost
   else if and highway=footway
     ( and not bicycle=designated
       ( or not cfg_allow_footway_bicycle_yes not bicycle=yes ) )
@@ -601,9 +602,9 @@ assign controlcost =
   else 0
 
 assign barriercost =
-  if barrier=stile|turnstile|kissing_gate then cfg_node_block_cost
-  else if barrier=cycle_barrier then cfg_cycle_barrier_cost
-  else if barrier=gate|lift_gate then cfg_gate_cost
+  if barrier=stile|turnstile|kissing_gate|horse_stile|full-height_turnstile then cfg_node_block_cost
+  else if barrier=cycle_barrier|motorcycle_barrier then cfg_cycle_barrier_cost
+  else if barrier=gate|lift_gate|swing_gate|sliding_gate|hampshire_gate|bump_gate then cfg_gate_cost
   else if barrier=bollard then cfg_bollard_cost
   else 0
 
@@ -615,4 +616,7 @@ assign railcrossingcost =
 
 # Final cost
 
-assign initialcost = if and cfg_block_fords highway=ford then cfg_node_block_cost else if not bikeaccess then cfg_node_block_cost else ( add crossingcost ( add controlcost ( add railcrossingcost barriercost ) ) )
+# Ford nodes are mostly tagged ford=*; highway=ford is the older tagging.
+assign fordnode = ( or ford=yes|stepping_stones highway=ford )
+
+assign initialcost = if and cfg_block_fords fordnode then cfg_node_block_cost else if not bikeaccess then cfg_node_block_cost else ( add crossingcost ( add controlcost ( add railcrossingcost barriercost ) ) )

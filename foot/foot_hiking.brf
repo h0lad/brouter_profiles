@@ -786,10 +786,10 @@ assign railcrossingcost =
 # Barriers and fords
 
 assign barriercost =
-  if barrier=stile then cfg_stile_cost
-  else if barrier=turnstile then cfg_turnstile_cost
+  if barrier=stile|horse_stile then cfg_stile_cost
+  else if barrier=turnstile|full-height_turnstile then cfg_turnstile_cost
   else if barrier=kissing_gate then cfg_kissing_gate_cost
-  else if barrier=gate then cfg_gate_cost
+  else if barrier=gate|swing_gate|sliding_gate|hampshire_gate|bump_gate then cfg_gate_cost
   else if barrier=lift_gate then cfg_lift_gate_cost
   else if barrier=bollard then cfg_bollard_cost
   else 0

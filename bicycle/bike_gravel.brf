@@ -716,7 +716,7 @@ assign costfactor =
   if and highway= not route=ferry then cfg_block_cost
   else if highway=motorway|motorway_link then cfg_block_cost
   else if highway=proposed|abandoned|construction then cfg_block_cost
-  else if and cfg_block_fords ford=yes then cfg_block_cost
+  else if and cfg_block_fords ford=yes|stepping_stones then cfg_block_cost
   else if route=ferry then
     if and cfg_allow_ferries lesser ( max accesspenalty onewaypenalty ) 9999 then cfg_ferry_factor
     else cfg_block_cost
@@ -804,11 +804,11 @@ assign railcrossingcost =
   else 0
 
 assign barriercost =
-  if barrier=stile then cfg_stile_cost
-  else if barrier=turnstile then cfg_turnstile_cost
+  if barrier=stile|horse_stile then cfg_stile_cost
+  else if barrier=turnstile|full-height_turnstile then cfg_turnstile_cost
   else if barrier=kissing_gate then cfg_kissing_gate_cost
-  else if barrier=cycle_barrier then cfg_cycle_barrier_cost
-  else if barrier=gate|lift_gate then cfg_gate_cost
+  else if barrier=cycle_barrier|motorcycle_barrier then cfg_cycle_barrier_cost
+  else if barrier=gate|lift_gate|swing_gate|sliding_gate|hampshire_gate|bump_gate then cfg_gate_cost
   else if barrier=bollard then cfg_bollard_cost
   else 0
 
@@ -820,7 +820,12 @@ assign accesscost =
   else if and cfg_allow_dismount footaccess then cfg_dismount_entry_cost
   else cfg_node_block_cost
 
+# Ford nodes are mostly tagged ford=*; highway=ford is the older tagging.
+assign fordnode = ( or ford=yes|stepping_stones highway=ford )
+
 assign initialcost =
+  if and cfg_block_fords fordnode then cfg_node_block_cost
+  else
   add accesscost
     add crossingcost
       add controlcost

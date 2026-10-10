@@ -569,7 +569,7 @@ assign basefactor =
 assign common_penalty = ( add route_penalty ( add traffic_penalty ( add forest_penalty ( add roughness_penalty ( add track_penalty ( add visibility_penalty ( add wet_penalty sac_penalty ) ) ) ) ) ) )
 assign costfactor =
   if and highway= not route=ferry then cfg_block_cost
-  else if route=ferry then if and cfg_allow_ferries lesser access_and_oneway 9999 then cfg_ferry_factor else cfg_block_cost else if highway=motorway|motorway_link then cfg_block_cost else if highway=construction|proposed|abandoned then cfg_block_cost else if and cfg_block_fords ford=yes then cfg_block_cost else min cfg_max_factor ( add basefactor ( add common_penalty ( add flat_tech access_and_oneway ) ) )
+  else if route=ferry then if and cfg_allow_ferries lesser access_and_oneway 9999 then cfg_ferry_factor else cfg_block_cost else if highway=motorway|motorway_link then cfg_block_cost else if highway=construction|proposed|abandoned then cfg_block_cost else if and cfg_block_fords ford=yes|stepping_stones then cfg_block_cost else min cfg_max_factor ( add basefactor ( add common_penalty ( add flat_tech access_and_oneway ) ) )
 
 # Uphill prefers rideable climbs. mtb:scale:uphill has the strongest effect.
 assign uphillcostfactor = ( max 1 ( min cfg_max_factor ( add basefactor ( add common_penalty ( add uphill_tech access_and_oneway ) ) ) ) )
@@ -625,10 +625,10 @@ assign crossingcost =
 # Barriers
 
 assign barriercost =
-  if barrier=stile then cfg_stile_cost
-  else if barrier=turnstile then cfg_turnstile_cost
-  else if barrier=cycle_barrier then cfg_cycle_barrier_cost
-  else if barrier=gate|lift_gate then cfg_gate_cost
+  if barrier=stile|horse_stile then cfg_stile_cost
+  else if barrier=turnstile|full-height_turnstile then cfg_turnstile_cost
+  else if barrier=cycle_barrier|motorcycle_barrier then cfg_cycle_barrier_cost
+  else if barrier=gate|lift_gate|swing_gate|sliding_gate|hampshire_gate|bump_gate then cfg_gate_cost
   else if barrier=bollard then cfg_bollard_cost
   else 0
 
@@ -640,4 +640,9 @@ assign accesscost =
   else if and cfg_allow_hike_a_bike footaccess then cfg_hike_entry_cost
   else cfg_node_block_cost
 
-assign initialcost = ( add accesscost ( add crossingcost barriercost ) )
+# Ford nodes are mostly tagged ford=*; highway=ford is the older tagging.
+assign fordnode = ( or ford=yes|stepping_stones highway=ford )
+
+assign initialcost =
+  if and cfg_block_fords fordnode then cfg_node_block_cost
+  else ( add accesscost ( add crossingcost barriercost ) )
