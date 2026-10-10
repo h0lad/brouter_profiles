@@ -50,6 +50,10 @@ assign cfg_block_fords = true
 # Mountain navigation should not over-penalize trail junctions.
 assign cfg_turn_cost = 80
 
+# BRouter charges turn cost at every bend, not only at junctions. Curves are part
+# of riding singletrack, so rated or unpaved trails use this lower value.
+assign cfg_trail_turn_cost = 55
+
 
 # Bike and ETA model
 
@@ -563,7 +567,12 @@ assign downhillcostfactor = ( max 1 ( min cfg_max_factor ( add basefactor ( add 
 
 # Turns and transitions
 
-assign turncost = if junction=roundabout|circular then 0 else cfg_turn_cost
+assign turncost =
+  if junction=roundabout|circular then 0
+  else if not mtb:scale= then cfg_trail_turn_cost
+  else if not highway=path|bridleway then cfg_turn_cost
+  else if surface=asphalt|paved|concrete|paving_stones|sett then cfg_turn_cost
+  else cfg_trail_turn_cost
 assign initialclassifier = if route=ferry then 2 else if hike_only then 3 else 1
 assign initialcost = if route=ferry then cfg_ferry_entry_cost else if hike_only then cfg_hike_entry_cost else 0
 
