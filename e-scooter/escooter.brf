@@ -35,7 +35,7 @@ assign cfg_eta_power = 1100
 
 # Route preference:
 # higher = fewer turns, calmer navigation, possibly longer routes
-assign cfg_turn_cost = 100
+assign cfg_turn_cost = 80
 
 # Multiplier for rough-surface penalties.
 # 0 = ignore surface quality, 1 = full configured penalties.
@@ -165,9 +165,9 @@ assign cfg_max_routable_factor = 9999
 assign cfg_factor_cycleway = 1.00
 assign cfg_factor_bicycle_road = 1.03
 assign cfg_factor_living = 1.06
-assign cfg_factor_residential = 1.10
+assign cfg_factor_residential = 1.32
 assign cfg_factor_service = 1.15
-assign cfg_factor_unclassified = 1.33
+assign cfg_factor_unclassified = 1.60
 assign cfg_factor_road = 1.65
 
 assign cfg_factor_tertiary_protected = 1.18
