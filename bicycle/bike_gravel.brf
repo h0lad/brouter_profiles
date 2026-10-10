@@ -46,10 +46,10 @@ assign cfg_allow_dismount = false
 assign cfg_block_fords = true
 
 # Higher means fewer turns and simpler routes.
-assign cfg_turn_cost = 110
+assign cfg_turn_cost = 88
 
 # 0 ignores surface quality, 1 is the calibrated default.
-assign cfg_surface_weight = 1.0
+assign cfg_surface_weight = 0.8
 
 
 # Bike and ETA model
@@ -73,7 +73,7 @@ assign cfg_rider_power = 160
 # Elevation
 
 # Equivalent flat metres per vertical metre.
-assign cfg_uphill_cost = 30
+assign cfg_uphill_cost = 24
 assign cfg_uphill_cutoff = 1.0
 
 # Steep climbs get a stronger penalty above this grade.
@@ -116,7 +116,7 @@ assign cfg_factor_bicycle_road = 1.02
 assign cfg_factor_living = 1.05
 assign cfg_factor_residential = 1.08
 assign cfg_factor_service = 1.10
-assign cfg_factor_unclassified = 1.15
+assign cfg_factor_unclassified = 1.38
 assign cfg_factor_road = 1.35
 
 assign cfg_factor_tertiary_protected = 1.10
