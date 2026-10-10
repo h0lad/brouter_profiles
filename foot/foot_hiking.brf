@@ -13,7 +13,7 @@
 #   - demanding_mountain_hiking (alpine_hiking and above blocked)
 #   - mud, wet rock and poor trail visibility (more in rain)
 #   - roads without sidewalk
-#   - fords and via_ferrata (blocked; fords always blocked in rain)
+#   - via_ferrata (blocked); fords cost extra in dry weather and are blocked in rain
 
 ---context:global
 
@@ -65,9 +65,10 @@ assign cfg_allow_steps = true
 # Ferries are allowed.
 assign cfg_allow_ferries = true
 
-# Fords and stepping-stone crossings are blocked by default.
+# Fords and stepping-stone crossings are allowed in dry weather, with a small
+# node cost, because marked trails often cross streams. Set false to block them.
 # Rain always blocks them, regardless of this setting.
-assign cfg_allow_fords_dry = false
+assign cfg_allow_fords_dry = true
 
 
 # Main preference weights
