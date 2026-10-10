@@ -46,10 +46,10 @@ assign cfg_allow_dismount = false
 assign cfg_block_fords = true
 
 # Higher means fewer turns and simpler routes.
-assign cfg_turn_cost = 85
+assign cfg_turn_cost = 102
 
 # 0 ignores surface quality, 1 is the calibrated default.
-assign cfg_surface_weight = 1.05
+assign cfg_surface_weight = 1.40
 
 
 # Bike and ETA model
@@ -116,7 +116,7 @@ assign cfg_factor_bicycle_road = 1.02
 assign cfg_factor_living = 1.05
 assign cfg_factor_residential = 1.08
 assign cfg_factor_service = 1.10
-assign cfg_factor_unclassified = 1.15
+assign cfg_factor_unclassified = 1.38
 assign cfg_factor_road = 1.35
 
 assign cfg_factor_tertiary_protected = 1.10

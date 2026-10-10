@@ -54,7 +54,7 @@ assign cfg_consider_crossings = true
 assign cfg_consider_elevation = true
 
 # Extra cost of a 90-degree turn in equivalent metres.
-assign cfg_turn_cost = 95
+assign cfg_turn_cost = 76
 
 # Multiplier for unpaved and rough-surface penalties.
 # 0 = ignore surface quality, 1 = normal trekking, 2 = strong avoidance.
@@ -150,7 +150,7 @@ assign cfg_max_routable_factor = 9999
 assign cfg_factor_cycleway = 1.00
 assign cfg_factor_bicycle_road = 1.02
 assign cfg_factor_living = 1.05
-assign cfg_factor_residential = 1.08
+assign cfg_factor_residential = 1.00
 assign cfg_factor_service = 1.12
 assign cfg_factor_unclassified = 1.22
 assign cfg_factor_road = 1.50
