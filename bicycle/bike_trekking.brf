@@ -479,8 +479,8 @@ assign bikeaccess =
   else true
 
 assign footaccess =
-  if bicycle=dismount then true
-  else if foot=private|no then false
+  if foot=private|no then false
+  else if bicycle=dismount then true
   else if foot= then defaultaccess
   else true
 
@@ -835,7 +835,7 @@ assign costfactor =
   else if and not cfg_allow_fords ford=yes then cfg_block_cost
   else if smoothness=impassable then cfg_block_cost
   else if route=ferry then
-    if cfg_allow_ferries then cfg_ferry_factor
+    if and cfg_allow_ferries lesser access_and_oneway 9999 then cfg_ferry_factor
     else cfg_block_cost
   else if highway=steps then
     if and cfg_allow_steps footaccess then

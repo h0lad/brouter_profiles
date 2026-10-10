@@ -718,7 +718,7 @@ assign costfactor =
   else if highway=proposed|abandoned|construction then cfg_block_cost
   else if and cfg_block_fords ford=yes then cfg_block_cost
   else if route=ferry then
-    if cfg_allow_ferries then cfg_ferry_factor
+    if and cfg_allow_ferries lesser ( max accesspenalty onewaypenalty ) 9999 then cfg_ferry_factor
     else cfg_block_cost
   else if highway=steps then
     if and cfg_allow_steps footaccess then cfg_steps_factor

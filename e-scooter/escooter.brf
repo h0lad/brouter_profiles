@@ -513,8 +513,10 @@ assign coming_from_lowprio =
 # Final cost
 
 assign costfactor =
+  if and highway= not route=ferry then cfg_block_cost
+  else
   if route=ferry then
-    if cfg_allow_ferries then cfg_ferry_factor
+    if and cfg_allow_ferries ( and bikeaccess not badoneway ) then cfg_ferry_factor
     else cfg_block_cost
   else if and cfg_block_motorway highway=motorway|motorway_link then cfg_block_cost
   else if and cfg_block_trunk highway=trunk|trunk_link then cfg_block_cost

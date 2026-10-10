@@ -1,10 +1,10 @@
-# BRouter profile: gravel bike (v3)
+# BRouter profile: city bike
 #
-# Mixed paved and unpaved riding.
+# Everyday cycling in cities, towns and villages.
 #
 # Priorities:
-#   - compacted, fine_gravel and gravel surfaces
-#   - tracks grade1-2 rated like cycleways
+#   - paved and firm surfaces, with a modest penalty for loose gravel
+#   - cycleways and quiet local streets
 #   - low traffic stress
 #   - signed cycle routes (small bonus)
 #
@@ -160,7 +160,7 @@ assign cfg_factor_other = 2.50
 
 # Surface penalties
 
-# Penalty by OSM surface. Compacted and gravel surfaces are nearly free.
+# Penalty by OSM surface. Firm compacted surfaces remain useful; loose gravel costs more.
 assign cfg_surface_paving_stones = 0.05
 assign cfg_surface_compacted = 0.00
 assign cfg_surface_fine_gravel = 0.02
@@ -168,7 +168,7 @@ assign cfg_surface_sett = 0.20
 assign cfg_surface_cobblestone = 0.35
 assign cfg_surface_wood = 0.20
 assign cfg_surface_metal = 0.25
-assign cfg_surface_gravel = 0.08
+assign cfg_surface_gravel = 0.25
 assign cfg_surface_pebblestone = 0.20
 assign cfg_surface_ground = 0.35
 assign cfg_surface_dirt = 0.45
@@ -414,8 +414,8 @@ assign bikeaccess =
   else true
 
 assign footaccess =
-  if bicycle=dismount then true
-  else if foot=private|no then false
+  if foot=private|no then false
+  else if bicycle=dismount then true
   else if foot= then defaultaccess
   else true
 
@@ -714,7 +714,7 @@ assign costfactor =
   else if highway=proposed|abandoned|construction then cfg_block_cost
   else if and cfg_block_fords ford=yes then cfg_block_cost
   else if route=ferry then
-    if cfg_allow_ferries then cfg_ferry_factor
+    if and cfg_allow_ferries lesser ( max accesspenalty onewaypenalty ) 9999 then cfg_ferry_factor
     else cfg_block_cost
   else if highway=steps then
     if and cfg_allow_steps footaccess then cfg_steps_factor

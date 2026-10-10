@@ -485,8 +485,10 @@ assign tunnel_penalty =
 assign normal_cost = ( add basefactor ( add traffic_penalty ( add roughness_penalty ( add wet_surface_penalty tunnel_penalty ) ) ) )
 
 assign costfactor =
+  if and highway= not route=ferry then cfg_block_cost
+  else
   if route=ferry then
-    if cfg_allow_ferries then cfg_ferry_factor
+    if and cfg_allow_ferries footaccess then cfg_ferry_factor
     else cfg_block_cost
   else if highway=motorway|motorway_link then cfg_block_cost
   else if highway=construction|proposed|abandoned then cfg_block_cost
