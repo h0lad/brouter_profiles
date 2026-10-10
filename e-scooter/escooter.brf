@@ -433,6 +433,13 @@ assign surfacepenalty =
   else if surface=ground|earth|dirt|unpaved then cfg_surface_unpaved
   else if surface=grass then cfg_surface_grass
   else if surface=sand|mud then cfg_surface_sand_mud
+  # Untagged tracks: infer the typical surface from tracktype, so missing data
+  # is not cheaper than the same track with its surface mapped.
+  else if not surface= then 0
+  else if not highway=track then 0
+  else if tracktype=grade2 then cfg_surface_gravel
+  else if tracktype=grade3|grade4 then cfg_surface_unpaved
+  else if tracktype=grade5 then cfg_surface_grass
   else 0
 
 assign smoothnesspenalty =
