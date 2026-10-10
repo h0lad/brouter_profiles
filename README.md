@@ -1,4 +1,4 @@
-# Monte-Carlo Optimized BRouter Profiles
+# BRouter Profiles
 
 Routing profiles for [BRouter](https://github.com/abrensch/brouter) and BRouter-Web.
 
