@@ -39,7 +39,7 @@ assign cfg_turn_cost = 80
 
 # Multiplier for rough-surface penalties.
 # 0 = ignore surface quality, 1 = full configured penalties.
-assign cfg_surface_weight = 0.90
+assign cfg_surface_weight = 1.10
 
 # Use BRouter traffic estimates, speed limits and lane count
 assign cfg_consider_traffic = true

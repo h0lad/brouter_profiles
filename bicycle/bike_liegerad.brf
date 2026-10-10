@@ -114,7 +114,7 @@ assign cfg_factor_bicycle_road = 1.00
 assign cfg_factor_living = 1.08
 assign cfg_factor_residential = 1.10
 assign cfg_factor_service = 1.13
-assign cfg_factor_unclassified = 1.18
+assign cfg_factor_unclassified = 1.42
 assign cfg_factor_road = 1.45
 
 assign cfg_factor_tertiary_protected = 1.05
