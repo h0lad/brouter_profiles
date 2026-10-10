@@ -465,21 +465,21 @@ assign cycle_route_penalty =
 
 assign defaultaccess =
   if access= then not motorroad=yes
-  else if access=private|no then false
+  else if access=private|no|agricultural then false
   else true
 
 assign bikeaccess =
-  if bicycle=private|no|dismount then false
+  if bicycle=private|no|dismount|use_sidepath then false
   else if bicycle= then
     if bicycle_road=yes then true
     else if vehicle= then
       if highway=footway then false
       else defaultaccess
-    else not vehicle=private|no
+    else not vehicle=private|no|agricultural
   else true
 
 assign footaccess =
-  if foot=private|no then false
+  if foot=private|no|use_sidepath then false
   else if bicycle=dismount then true
   else if foot= then defaultaccess
   else true
@@ -572,10 +572,10 @@ assign speedrisk =
   if not cfg_consider_traffic then 0
   else if maxspeed=100|110|120|130 then cfg_speed_100
   else if maxspeed=90 then cfg_speed_90
-  else if maxspeed=80 then cfg_speed_80
+  else if maxspeed=80|rural then cfg_speed_80
   else if maxspeed=70 then cfg_speed_70
   else if maxspeed=60 then cfg_speed_60
-  else if maxspeed=50 then cfg_speed_50
+  else if maxspeed=50|urban then cfg_speed_50
   else if maxspeed=40 then cfg_speed_40
   else 0
 
@@ -902,14 +902,14 @@ assign dummyUsage = smoothness=
 
 assign defaultaccess =
   if access= then true
-  else if access=private|no then false
+  else if access=private|no|agricultural then false
   else true
 
 assign bikeaccess =
   if nodeaccessgranted=yes then true
   else if bicycle= then
     if vehicle= then defaultaccess
-    else not vehicle=private|no
+    else not vehicle=private|no|agricultural
   else not bicycle=private|no|dismount
 
 assign footaccess =

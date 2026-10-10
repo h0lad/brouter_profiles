@@ -327,11 +327,11 @@ assign consider_crossing = cfg_consider_crossings
 
 assign defaultaccess =
   if motorroad=yes then false
-  else if access=private|no then false
+  else if access=private|no|agricultural then false
   else true
 
 assign footaccess =
-  if foot=private|no then false
+  if foot=private|no|use_sidepath then false
   else if foot= then defaultaccess
   else true
 
@@ -356,10 +356,10 @@ assign traffic_raw =
 assign speed_raw =
   if maxspeed=100|110|120|130 then cfg_speed_100
   else if maxspeed=90 then cfg_speed_90
-  else if maxspeed=80 then cfg_speed_80
+  else if maxspeed=80|rural then cfg_speed_80
   else if maxspeed=70 then cfg_speed_70
   else if maxspeed=60 then cfg_speed_60
-  else if maxspeed=50 then cfg_speed_50
+  else if maxspeed=50|urban then cfg_speed_50
   else 0
 
 assign traffic_base = ( max traffic_raw speed_raw )
@@ -545,7 +545,7 @@ assign priorityclassifier =
 # Access
 
 assign defaultaccess =
-  if access=private|no then false
+  if access=private|no|agricultural then false
   else true
 
 assign footaccess =

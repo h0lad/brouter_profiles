@@ -320,15 +320,15 @@ assign cost_ToRight_from_H_class6 = cfg_high_turn_6
 
 assign defaultaccess =
   if access= then not motorroad=yes
-  else if access=private|no then false
+  else if access=private|no|agricultural then false
   else true
 
 assign bikeaccess =
   if motorroad=yes then false
-  else if bicycle=private|no|dismount then false
+  else if bicycle=private|no|dismount|use_sidepath then false
   else if bicycle= then
     if vehicle= then defaultaccess
-    else not vehicle=private|no
+    else not vehicle=private|no|agricultural
   else true
 
 assign nodeaccessgranted = false
@@ -396,9 +396,9 @@ assign trafficrisk =
 assign speedrisk =
   if not cfg_consider_traffic then 0
   else if maxspeed=100|110|120|130 then cfg_speed_100_plus
-  else if maxspeed=80|90 then cfg_speed_80_90
+  else if maxspeed=80|90|rural then cfg_speed_80_90
   else if maxspeed=60|70 then cfg_speed_60_70
-  else if maxspeed=40|50 then cfg_speed_40_50
+  else if maxspeed=40|50|urban then cfg_speed_40_50
   else 0
 
 assign lanerisk =
@@ -568,14 +568,14 @@ assign priorityclassifier =
 
 assign defaultaccess =
   if access= then true
-  else if access=private|no then false
+  else if access=private|no|agricultural then false
   else true
 
 assign bikeaccess =
   if nodeaccessgranted=yes then true
   else if bicycle= then
     if vehicle= then defaultaccess
-    else not vehicle=private|no
+    else not vehicle=private|no|agricultural
   else not bicycle=private|no|dismount
 
 

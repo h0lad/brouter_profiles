@@ -349,9 +349,9 @@ assign cycle_route_penalty = if not cfg_prefer_cycle_routes then 0 else if activ
 
 # Access
 
-assign defaultaccess = if motorroad=yes then false else if access=private|no then false else true
-assign bikeaccess = if bicycle=private|no|dismount then false else if bicycle= then if vehicle= then defaultaccess else not vehicle=private|no else true
-assign footaccess = if foot=private|no then false else true
+assign defaultaccess = if motorroad=yes then false else if access=private|no|agricultural then false else true
+assign bikeaccess = if bicycle=private|no|dismount|use_sidepath then false else if bicycle= then if vehicle= then defaultaccess else not vehicle=private|no|agricultural else true
+assign footaccess = if foot=private|no|use_sidepath then false else true
 assign dismount = ( and not bikeaccess footaccess )
 assign access_penalty = if bikeaccess then 0 else if and cfg_allow_dismount footaccess then cfg_dismount_factor else cfg_block_cost
 assign nodeaccessgranted = false
@@ -373,7 +373,7 @@ assign oneway_penalty = if legal_contraflow then 0 else cfg_block_cost
 # Traffic stress
 
 assign trafficrisk = if not cfg_consider_traffic then 0 else if estimated_traffic_class=7 then cfg_traffic_7 else if estimated_traffic_class=6 then cfg_traffic_6 else if estimated_traffic_class=5 then cfg_traffic_5 else if estimated_traffic_class=4 then cfg_traffic_4 else if estimated_traffic_class=3 then cfg_traffic_3 else if estimated_traffic_class=2 then cfg_traffic_2 else if estimated_traffic_class=1 then cfg_traffic_1 else 0
-assign speedrisk = if not cfg_consider_traffic then 0 else if maxspeed=100|110|120|130 then cfg_speed_100 else if maxspeed=90 then cfg_speed_90 else if maxspeed=80 then cfg_speed_80 else if maxspeed=70 then cfg_speed_70 else if maxspeed=60 then cfg_speed_60 else if maxspeed=50 then cfg_speed_50 else if maxspeed=40 then cfg_speed_40 else 0
+assign speedrisk = if not cfg_consider_traffic then 0 else if maxspeed=100|110|120|130 then cfg_speed_100 else if maxspeed=90 then cfg_speed_90 else if maxspeed=80|rural then cfg_speed_80 else if maxspeed=70 then cfg_speed_70 else if maxspeed=60 then cfg_speed_60 else if maxspeed=50|urban then cfg_speed_50 else if maxspeed=40 then cfg_speed_40 else 0
 assign lanerisk = if not cfg_consider_traffic then 0 else if lanes=6|7|8 then cfg_lanes_6plus else if lanes=5 then cfg_lanes_5 else if lanes=4 then cfg_lanes_4 else if lanes=3 then cfg_lanes_3 else 0
 assign raw_motor_stress = ( max trafficrisk ( max speedrisk lanerisk ) )
 assign motor_stress = if motorfree then 0 else if highway=cycleway then 0 else if protected_cycle then multiply raw_motor_stress cfg_protected_stress_scale else if painted_cycle then multiply raw_motor_stress cfg_painted_stress_scale else if shared_cycle then multiply raw_motor_stress cfg_shared_stress_scale else if shoulder_cycle then multiply raw_motor_stress cfg_shoulder_stress_scale else raw_motor_stress
@@ -425,8 +425,8 @@ assign priorityclassifier = if highway=motorway then 30 else if highway=motorway
 
 # Access
 
-assign defaultaccess = if access=private|no then false else true
-assign bikeaccess = if nodeaccessgranted=yes then true else if bicycle=private|no|dismount then false else if bicycle= then if vehicle= then defaultaccess else not vehicle=private|no else true
+assign defaultaccess = if access=private|no|agricultural then false else true
+assign bikeaccess = if nodeaccessgranted=yes then true else if bicycle=private|no|dismount then false else if bicycle= then if vehicle= then defaultaccess else not vehicle=private|no|agricultural else true
 
 # Crossings
 

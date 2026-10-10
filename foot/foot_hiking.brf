@@ -466,11 +466,11 @@ assign route_penalty =
 
 assign defaultaccess =
   if motorroad=yes then false
-  else if access=private|no then false
+  else if access=private|no|agricultural then false
   else true
 
 assign footaccess =
-  if foot=private|no then false
+  if foot=private|no|use_sidepath then false
   else if foot= then defaultaccess
   else true
 
@@ -745,7 +745,7 @@ assign priorityclassifier =
 # Access
 
 assign defaultaccess =
-  if access=private|no then false
+  if access=private|no|agricultural then false
   else true
 
 assign footaccess =
